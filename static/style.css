@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
 
+/* ========================================
+   MOTION & ANIMATION TOKENS
+   ======================================== */
+
 @keyframes slideInUp {
   from {
     opacity: 0;
@@ -21,54 +25,264 @@
   50% { opacity: 0.8; }
 }
 
+@keyframes clayPress {
+  0% { transform: translateY(0); box-shadow: var(--shadow-clay-outset-md); }
+  50% { transform: translateY(2px); box-shadow: var(--shadow-clay-outset-sm); }
+  100% { transform: translateY(4px); box-shadow: var(--shadow-clay-inset-md); }
+}
+
+@keyframes clayRelease {
+  0% { transform: translateY(4px); box-shadow: var(--shadow-clay-inset-md); }
+  100% { transform: translateY(0); box-shadow: var(--shadow-clay-outset-md); }
+}
+
 @keyframes shimmer {
   0% { background-position: -1000px 0; }
   100% { background-position: 1000px 0; }
 }
 
 @keyframes glow {
-  0%, 100% { text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
-  50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.6); }
+  0%, 100% { text-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
+  50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
 }
+
+@keyframes clayFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-2px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes depthShift {
+  0%, 100% { box-shadow: var(--shadow-clay-outset-lg); }
+  50% { box-shadow: var(--shadow-clay-outset-xl); }
+}
+
+@keyframes subtleShine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   COLOR & DESIGN TOKENS - DARK CLAYMORPHISM
+   ======================================== */
 
 :root {
-  --bg-color: #000000;
-  --surface-color: #0a0a0a;
-  --surface-hover: #141414;
-  --border-color: #333333;
+  /* PRIMARY PALETTE - Dark Clay Tones */
+  --clay-darkest: #0a0a0a;
+  --clay-dark: #121212;
+  --clay-mid: #1a1a1a;
+  --clay-light: #242424;
+  --clay-lighter: #2d2d2d;
+  --clay-lightest: #383838;
+
+  /* NEUTRAL PALETTE */
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #eeeeee;
+  --gray-300: #e0e0e0;
+  --gray-400: #bdbdbd;
+  --gray-500: #9e9e9e;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+
+  /* SEMANTIC COLORS - Monochromatic with Depth */
+  --surface-bg: var(--clay-darkest);
+  --surface-primary: var(--clay-dark);
+  --surface-secondary: var(--clay-mid);
+  --surface-tertiary: var(--clay-light);
+  --surface-elevation-1: var(--clay-lighter);
+  --surface-elevation-2: var(--clay-lightest);
+
+  /* TEXT COLORS */
   --text-primary: #ffffff;
-  --text-secondary: #a0a0a0;
-  --accent-color: #ffffff;
-  --accent-hover: #cccccc;
+  --text-secondary: #a8a8a8;
+  --text-tertiary: #808080;
+  --text-disabled: #5a5a5a;
 
-  --font-sans: 'Inter', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* ACCENT - Pure White for contrast */
+  --accent-primary: #ffffff;
+  --accent-secondary: #e8e8e8;
+  --accent-tertiary: #d0d0d0;
 
+  /* FUNCTIONAL COLORS - Grayscale palette */
+  --success-light: #d4e8d4;
+  --success-dark: #3d6b3d;
+  --error-light: #e8d4d4;
+  --error-dark: #6b3d3d;
+  --warning-light: #e8e0d4;
+  --warning-dark: #6b6340;
+  --info-light: #d4e0e8;
+  --info-dark: #3d5a6b;
+
+  /* BORDER & DIVIDER */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.24);
+
+  /* TYPOGRAPHY */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* TYPOGRAPHY SCALE - Improved Hierarchy */
+  --fs-xs: 0.6875rem;
+  --fs-sm: 0.75rem;
+  --fs-base: 0.875rem;
+  --fs-lg: 1rem;
+  --fs-xl: 1.125rem;
+  --fs-2xl: 1.375rem;
+  --fs-3xl: 1.75rem;
+  --fs-4xl: 2.25rem;
+  --fs-5xl: 3rem;
+
+  --fw-300: 300;
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+  --fw-700: 700;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.75;
+  --lh-loose: 2;
+
+  /* SPACING SCALE - Refined Density */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-0_5: 0.25rem;
+  --space-1: 0.5rem;
+  --space-1_5: 0.75rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 2.5rem;
+  --space-6: 3rem;
+  --space-8: 4rem;
+  --space-10: 5rem;
+  --space-12: 6rem;
+  --space-16: 8rem;
+
+  /* BORDER RADIUS - Clay Aesthetic */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-2xl: 40px;
+  --radius-full: 9999px;
+
+  /* CLAY SHADOW SYSTEM - Inset & Outset with Depth */
+  /* Subtle outer shadows (raised effect) */
+  --shadow-clay-outset-xs:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 1px 4px rgba(0, 0, 0, 0.08);
+  --shadow-clay-outset-sm:
+    0 2px 4px rgba(0, 0, 0, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-clay-outset-md:
+    0 4px 12px rgba(0, 0, 0, 0.18),
+    0 8px 16px rgba(0, 0, 0, 0.14);
+  --shadow-clay-outset-lg:
+    0 8px 24px rgba(0, 0, 0, 0.20),
+    0 16px 32px rgba(0, 0, 0, 0.16);
+  --shadow-clay-outset-xl:
+    0 12px 36px rgba(0, 0, 0, 0.22),
+    0 24px 48px rgba(0, 0, 0, 0.18);
+
+  /* Inner shadows (inset/pressed effect) */
+  --shadow-clay-inset-sm:
+    inset 0 2px 4px rgba(0, 0, 0, 0.25),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.04);
+  --shadow-clay-inset-md:
+    inset 0 3px 6px rgba(0, 0, 0, 0.30),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.05);
+  --shadow-clay-inset-lg:
+    inset 0 4px 8px rgba(0, 0, 0, 0.35),
+    inset 0 -2px 6px rgba(255, 255, 255, 0.06);
+
+  /* Atmospheric effects */
+  --shadow-glow-subtle: 0 0 16px rgba(255, 255, 255, 0.08);
+  --shadow-glow-medium: 0 0 24px rgba(255, 255, 255, 0.12);
+  --shadow-glow-strong: 0 0 32px rgba(255, 255, 255, 0.16);
+
+  /* TRANSITIONS & TIMING */
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-slowest: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 20px rgba(255, 255, 255, 0.1);
+  /* Z-INDEX SCALE */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-bg: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+  --z-offcanvas: 800;
+  --z-max: 999;
 }
 
+/* LIGHT THEME - Inverted Clay */
 [data-theme="light"] {
-  --bg-color: #ffffff;
-  --surface-color: #f5f5f5;
-  --surface-hover: #e8e8e8;
-  --border-color: #d0d0d0;
-  --text-primary: #000000;
-  --text-secondary: #666666;
-  --accent-color: #000000;
-  --accent-hover: #333333;
-  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.08);
+  --surface-bg: #ffffff;
+  --surface-primary: #f8f8f8;
+  --surface-secondary: #f0f0f0;
+  --surface-tertiary: #e8e8e8;
+  --surface-elevation-1: #e0e0e0;
+  --surface-elevation-2: #d8d8d8;
+
+  --text-primary: #0a0a0a;
+  --text-secondary: #4a4a4a;
+  --text-tertiary: #6a6a6a;
+  --text-disabled: #a0a0a0;
+
+  --accent-primary: #0a0a0a;
+  --accent-secondary: #242424;
+  --accent-tertiary: #3d3d3d;
+
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --border-default: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.16);
+
+  --shadow-clay-outset-sm:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 4px 8px rgba(0, 0, 0, 0.06);
+  --shadow-clay-outset-md:
+    0 4px 12px rgba(0, 0, 0, 0.10),
+    0 8px 16px rgba(0, 0, 0, 0.08);
+  --shadow-clay-outset-lg:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 16px 32px rgba(0, 0, 0, 0.10);
+  --shadow-clay-outset-xl:
+    0 12px 36px rgba(0, 0, 0, 0.14),
+    0 24px 48px rgba(0, 0, 0, 0.12);
+
+  --shadow-clay-inset-sm:
+    inset 0 2px 4px rgba(0, 0, 0, 0.06),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.80);
+  --shadow-clay-inset-md:
+    inset 0 3px 6px rgba(0, 0, 0, 0.08),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.90);
+
+  --shadow-glow-subtle: 0 0 16px rgba(0, 0, 0, 0.04);
+  --shadow-glow-medium: 0 0 24px rgba(0, 0, 0, 0.06);
+  --shadow-glow-strong: 0 0 32px rgba(0, 0, 0, 0.08);
 }
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
 
 * {
   box-sizing: border-box;
@@ -76,167 +290,669 @@
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: var(--bg-color);
+  background-color: var(--surface-bg);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  line-height: 1.6;
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  font-weight: var(--fw-400);
+  letter-spacing: -0.015em;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: background-color var(--transition-base), color var(--transition-base);
   animation: fadeIn 0.5s ease-out;
 }
 
-/* Typography */
+/* ========================================
+   TYPOGRAPHY - Enhanced Hierarchy
+   ======================================== */
+
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  margin-bottom: 1.5rem;
+  font-weight: var(--fw-700);
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-4);
   animation: slideInUp 0.6s ease-out;
+  line-height: var(--lh-tight);
 }
 
-h1 { font-size: 3rem; line-height: 1.2; }
-h2 { font-size: 2.25rem; line-height: 1.3; }
-h3 { font-size: 1.75rem; line-height: 1.4; }
+h1 {
+  font-size: var(--fs-5xl);
+  margin-bottom: var(--space-5);
+}
+
+h2 {
+  font-size: var(--fs-4xl);
+  margin-bottom: var(--space-4);
+}
+
+h3 {
+  font-size: var(--fs-3xl);
+  margin-bottom: var(--space-3);
+}
+
+h4 {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--space-2);
+}
+
+h5 {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--space-2);
+}
+
+h6 {
+  font-size: var(--fs-lg);
+  margin-bottom: var(--space-1_5);
+}
+
+p {
+  margin-bottom: var(--space-3);
+  line-height: var(--lh-relaxed);
+}
 
 a {
   color: var(--text-primary);
   text-decoration: none;
   transition: color var(--transition-fast), transform var(--transition-fast);
   position: relative;
+  font-weight: var(--fw-500);
 }
 
 a:hover {
-  color: var(--accent-hover);
-  transform: translateX(2px);
+  color: var(--accent-secondary);
+  transform: translateX(1px);
 }
 
-/* Layout */
+a:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+strong {
+  font-weight: var(--fw-700);
+}
+
+code {
+  font-family: var(--font-mono);
+  background: var(--surface-tertiary);
+  padding: var(--space-0_5) var(--space-1);
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+/* ========================================
+   LAYOUT
+   ======================================== */
+
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 2.5rem;
+  padding: var(--space-2) var(--space-4);
   flex: 1;
   width: 100%;
 }
 
-/* Navbar */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-2);
+  }
+}
+
+/* ========================================
+   NAVBAR - Premium Clay-Themed
+   ======================================== */
+
 .mailpro-navbar {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(10, 10, 10, 0.8) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: var(--shadow-md);
-  padding: 1rem 2.5rem;
+  background: linear-gradient(180deg, var(--surface-primary) 0%, var(--surface-secondary) 100%);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border-bottom: 1px solid var(--border-default);
+  box-shadow: var(--shadow-clay-outset-md);
+  padding: var(--space-2_5) var(--space-4);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: var(--z-sticky);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all var(--transition-normal);
+  gap: var(--space-4);
+  transition: all var(--transition-base);
+  flex-wrap: wrap;
 }
 
 .mailpro-navbar:hover {
-  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-clay-outset-lg);
+  border-bottom-color: var(--border-strong);
 }
 
-[data-theme="light"] .mailpro-navbar {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(245, 245, 245, 0.9) 100%);
-  border-bottom-color: rgba(0, 0, 0, 0.05);
+.mailpro-navbar-primary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex: 1;
+  min-width: 0;
 }
 
 .mailpro-logo-link {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-1_5);
   font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: -0.05em;
+  font-weight: var(--fw-700);
+  font-size: var(--fs-xl);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  transition: transform var(--transition-fast);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .mailpro-logo-link:hover {
   transform: scale(1.05);
 }
 
+.mailpro-logo-link:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
 .mailpro-logo-img {
-  width: 32px;
-  height: 32px;
-  filter: grayscale(100%) contrast(200%);
-  transition: filter var(--transition-normal);
+  width: 36px;
+  height: 36px;
+  filter: grayscale(100%) brightness(0.95);
+  transition: filter var(--transition-base), transform var(--transition-base);
 }
 
 .mailpro-logo-link:hover .mailpro-logo-img {
-  filter: grayscale(50%) contrast(200%) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+  filter: grayscale(20%) brightness(1.15);
+  transform: scale(1.12);
 }
 
-[data-theme="light"] .mailpro-logo-img {
-  filter: grayscale(100%) invert(100%) contrast(200%);
+.mailpro-nav-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1_5);
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  padding: var(--space-1_5) var(--space-3);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-inset-sm);
 }
 
-[data-theme="light"] .mailpro-logo-link:hover .mailpro-logo-img {
-  filter: grayscale(50%) invert(100%) contrast(200%) drop-shadow(0 0 8px rgba(0, 0, 0, 0.2));
+.mailpro-nav-search:focus-within {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-inset-md), 0 0 0 3px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, var(--surface-elevation-1) 0%, var(--surface-tertiary) 100%);
+}
+
+.mailpro-nav-search-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.mailpro-nav-search-input {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+}
+
+.mailpro-nav-search-input::placeholder {
+  color: var(--text-tertiary);
 }
 
 .mailpro-nav {
   display: flex;
-  gap: 3rem;
+  gap: var(--space-5);
+  align-items: center;
 }
 
 .mailpro-nav-link {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-600);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   position: relative;
   font-family: var(--font-mono);
-  transition: color var(--transition-normal);
+  color: var(--text-secondary);
+  transition: color var(--transition-base);
+  padding: var(--space-1) 0;
+}
+
+.mailpro-nav-link:hover,
+.mailpro-nav-link.active {
+  color: var(--accent-primary);
 }
 
 .mailpro-nav-link::before {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -4px;
   left: 0;
-  width: 100%;
+  width: 0%;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent-color) 0%, transparent 100%);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--transition-normal);
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
+  transition: width var(--transition-base);
 }
 
 .mailpro-nav-link:hover::before,
 .mailpro-nav-link.active::before {
-  transform: scaleX(1);
+  width: 100%;
 }
 
-/* Buttons */
-.mailpro-btn, .btn {
+.mailpro-navbar-end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.mailpro-nav-account-dropdown {
+  position: relative;
+}
+
+.mailpro-btn-account-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-sm);
+  padding: 0;
+  font-size: var(--fs-lg);
+  flex-shrink: 0;
+}
+
+.mailpro-btn-account-toggle:hover {
+  background: linear-gradient(135deg, var(--surface-elevation-1) 0%, var(--surface-tertiary) 100%);
+  box-shadow: var(--shadow-clay-outset-md);
+  border-color: var(--border-strong);
+  transform: scale(1.08);
+}
+
+.mailpro-btn-account-toggle:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.mailpro-account-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-clay-outset-lg);
+  min-width: 220px;
+  margin-top: var(--space-2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all var(--transition-base);
+  z-index: var(--z-dropdown);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.mailpro-account-dropdown-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mailpro-account-dropdown-header {
+  padding: var(--space-3) var(--space-3);
+  border-bottom: 1px solid var(--border-default);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+}
+
+.mailpro-account-dropdown-user {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.mailpro-account-dropdown-email {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-600);
+  color: var(--accent-primary);
+  word-break: break-word;
+}
+
+.mailpro-account-dropdown-items {
+  padding: var(--space-1);
+}
+
+.mailpro-account-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  border-radius: var(--radius-md);
+}
+
+.mailpro-account-dropdown-item:hover {
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-elevation-1) 100%);
+  color: var(--accent-primary);
+  transform: translateX(2px);
+}
+
+.mailpro-account-dropdown-divider {
+  height: 1px;
+  background: var(--border-default);
+  margin: var(--space-1) 0;
+}
+
+.mailpro-hamburger-menu {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  width: 28px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.mailpro-hamburger-menu span {
+  width: 100%;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+}
+
+.mailpro-hamburger-menu.open span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.mailpro-hamburger-menu.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.mailpro-hamburger-menu.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.mailpro-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--surface-primary) 0%, var(--surface-secondary) 100%);
+  z-index: var(--z-offcanvas);
+  animation: slideInUp 0.3s ease-out;
+}
+
+.mailpro-mobile-menu.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.mailpro-mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-4);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.mailpro-mobile-menu-close {
+  background: none;
+  border: none;
+  font-size: var(--fs-2xl);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mailpro-mobile-menu-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+}
+
+.mailpro-mobile-nav-link {
+  display: block;
+  padding: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  margin-bottom: var(--space-1);
+}
+
+.mailpro-mobile-nav-link:hover,
+.mailpro-mobile-nav-link.active {
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-elevation-1) 100%);
+  color: var(--accent-primary);
+}
+
+.mailpro-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.mailpro-breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1_5);
+}
+
+.mailpro-breadcrumb-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.mailpro-breadcrumb-link:hover {
+  color: var(--accent-primary);
+}
+
+.mailpro-breadcrumb-separator {
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 1024px) {
+  .mailpro-nav-search {
+    max-width: 250px;
+  }
+
+  .mailpro-nav {
+    gap: var(--space-3);
+  }
+
+  .mailpro-nav-link {
+    font-size: var(--fs-xs);
+  }
+}
+
+@media (max-width: 768px) {
+  .mailpro-navbar {
+    flex-wrap: wrap;
+    padding: var(--space-2) var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .mailpro-navbar-primary {
+    width: 100%;
+    gap: var(--space-2);
+  }
+
+  .mailpro-nav {
+    display: none;
+  }
+
+  .mailpro-nav-search {
+    flex: 1;
+    min-width: 200px;
+    max-width: none;
+  }
+
+  .mailpro-navbar-end {
+    gap: var(--space-2);
+  }
+
+  .mailpro-hamburger-menu {
+    display: flex;
+  }
+
+  .mailpro-mobile-menu {
+    left: -100%;
+    transition: left var(--transition-base);
+  }
+
+  .mailpro-mobile-menu.open {
+    left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .mailpro-navbar {
+    padding: var(--space-1_5) var(--space-2);
+  }
+
+  .mailpro-logo-link {
+    font-size: var(--fs-lg);
+    gap: var(--space-1);
+  }
+
+  .mailpro-logo-img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mailpro-nav-search {
+    display: none;
+  }
+
+  .mailpro-navbar-primary {
+    gap: var(--space-1);
+  }
+}
+
+/* ========================================
+   BUTTONS - 3D CLAY STYLE WITH STATES
+   ======================================== */
+
+.mailpro-btn,
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.875rem 1.75rem;
+  padding: var(--space-2) var(--space-4);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-600);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all var(--transition-normal);
-  border: 1px solid var(--border-color);
-  background: transparent;
+  border: 1px solid var(--border-default);
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
   color: var(--text-primary);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-clay-outset-md);
   position: relative;
   overflow: hidden;
+  transition: all var(--transition-base);
+  user-select: none;
+  gap: var(--space-1);
 }
 
+/* Button default state */
+.mailpro-btn {
+  transform: translateY(0);
+}
+
+/* Hover state - lift effect */
+.mailpro-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-clay-outset-lg);
+  border-color: var(--border-strong);
+  background: linear-gradient(135deg, var(--surface-light) 0%, var(--surface-tertiary) 100%);
+}
+
+/* Active/press state - sink into surface */
+.mailpro-btn:active:not(:disabled) {
+  animation: clayPress 0.3s ease-out forwards;
+}
+
+/* Focus visible state */
+.mailpro-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.mailpro-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: var(--shadow-clay-inset-sm);
+  color: var(--text-disabled);
+}
+
+/* Shine effect */
 .mailpro-btn::before {
   content: '';
   position: absolute;
@@ -244,107 +960,139 @@ a:hover {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left var(--transition-slow);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left var(--transition-slowest) ease-out;
+  pointer-events: none;
 }
 
-.mailpro-btn:hover::before {
+.mailpro-btn:hover::before:not(:disabled) {
   left: 100%;
 }
 
-.mailpro-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+/* Primary button */
+.mailpro-btn-primary,
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
+  color: var(--surface-bg);
+  border-color: var(--accent-secondary);
+  box-shadow:
+    var(--shadow-clay-outset-md),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  font-weight: var(--fw-700);
 }
 
-.mailpro-btn:active {
-  transform: translateY(0);
+.mailpro-btn-primary:hover:not(:disabled),
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
+  box-shadow:
+    var(--shadow-clay-outset-lg),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  border-color: var(--accent-primary);
 }
 
-.mailpro-btn-primary, .btn-primary {
-  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
-  color: var(--bg-color);
-  border-color: var(--accent-color);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+.mailpro-btn-primary:active:not(:disabled),
+.btn-primary:active:not(:disabled) {
+  animation: clayPress 0.3s ease-out forwards;
 }
 
-.mailpro-btn-primary:hover, .btn-primary:hover {
-  background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent-color) 100%);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-  border-color: var(--accent-hover);
+/* Secondary button */
+.mailpro-btn-secondary,
+.btn-secondary {
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-clay-outset-md);
 }
 
-.mailpro-btn-secondary, .btn-secondary {
-  background: linear-gradient(135deg, var(--surface-color) 0%, var(--surface-hover) 100%);
-  border-color: rgba(255, 255, 255, 0.1);
+.mailpro-btn-secondary:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--surface-elevation-1) 0%, var(--surface-tertiary) 100%);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-lg);
 }
 
-.mailpro-btn-secondary:hover, .btn-secondary:hover {
-  background: linear-gradient(135deg, var(--surface-hover) 0%, rgba(255, 255, 255, 0.1) 100%);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
+/* Theme toggle button */
 .mailpro-btn-theme-toggle {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
+  border: 1px solid var(--border-default);
   color: var(--text-primary);
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--transition-normal);
-  font-size: 1.2rem;
-  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  font-size: var(--fs-xl);
+  box-shadow: var(--shadow-clay-outset-md);
+  padding: 0;
+  flex-shrink: 0;
 }
 
 .mailpro-btn-theme-toggle:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
-  transform: scale(1.1);
+  background: linear-gradient(135deg, var(--surface-elevation-1) 0%, var(--surface-tertiary) 100%);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-lg);
+  transform: scale(1.08);
 }
 
 .mailpro-btn-theme-toggle:active {
-  transform: scale(0.95);
+  animation: clayPress 0.2s ease-out forwards;
 }
 
-/* Cards & Sections */
-.mailpro-header {
-  padding: 5rem 0 3rem;
-  text-align: center;
-  animation: slideInUp 0.7s ease-out;
+.mailpro-btn-theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
 }
 
-.mailpro-tagline {
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  margin-bottom: 2rem;
-  transition: color var(--transition-normal);
-  letter-spacing: 0.05em;
-}
+/* ========================================
+   CARDS & SURFACES - Elevation System
+   ======================================== */
 
-.mailpro-header:hover .mailpro-tagline {
-  color: var(--text-primary);
-}
-
-.mailpro-card, .card {
-  background: linear-gradient(135deg, var(--surface-color) 0%, rgba(20, 20, 20, 0.8) 100%);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.mailpro-card,
+.card {
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-lg);
   position: relative;
   overflow: hidden;
 }
 
+.mailpro-card:hover,
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-xl);
+  transform: translateY(-4px);
+}
+
+/* Elevation layers */
+.elevation-0 {
+  box-shadow: var(--shadow-clay-outset-xs);
+}
+
+.elevation-1 {
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+.elevation-2 {
+  box-shadow: var(--shadow-clay-outset-md);
+}
+
+.elevation-3 {
+  box-shadow: var(--shadow-clay-outset-lg);
+}
+
+.elevation-4 {
+  box-shadow: var(--shadow-clay-outset-xl);
+}
+
+/* Atmospheric shimmer effect */
 .mailpro-card::before {
   content: '';
   position: absolute;
@@ -352,8 +1100,8 @@ a:hover {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-  transition: left 0.6s ease;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  transition: left 0.8s ease;
   pointer-events: none;
 }
 
@@ -361,21 +1109,36 @@ a:hover {
   left: 100%;
 }
 
-.mailpro-card:hover, .card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+.mailpro-header {
+  padding: var(--space-8) var(--space-4) var(--space-6);
+  text-align: center;
+  animation: slideInUp 0.7s ease-out;
+}
+
+.mailpro-tagline {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-base);
+  margin-bottom: var(--space-4);
+  transition: color var(--transition-base);
+  letter-spacing: 0.05em;
+  font-weight: var(--fw-500);
+}
+
+.mailpro-header:hover .mailpro-tagline {
+  color: var(--text-primary);
 }
 
 .mailpro-section-title {
   font-family: var(--font-mono);
   text-transform: uppercase;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 1rem;
-  margin-bottom: 2.5rem;
-  font-size: 1.5rem;
-  letter-spacing: 0.1em;
-  transition: border-color var(--transition-normal);
+  border-bottom: 2px solid var(--border-default);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-2xl);
+  letter-spacing: 0.08em;
+  transition: border-color var(--transition-base);
+  font-weight: var(--fw-700);
 }
 
 .mailpro-section-title::after {
@@ -383,75 +1146,116 @@ a:hover {
   display: block;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent-color), transparent);
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
   margin-top: -2px;
-  transition: width var(--transition-normal);
+  transition: width var(--transition-base);
 }
 
 .mailpro-card:hover .mailpro-section-title::after {
   width: 100%;
 }
 
-/* Forms */
+/* ========================================
+   FORMS
+   ======================================== */
+
 .mailpro-form-group {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-4);
   animation: slideInUp 0.5s ease-out;
 }
 
-.mailpro-label, label {
+.mailpro-label,
+label {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-xs);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   color: var(--text-secondary);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-1_5);
   transition: color var(--transition-fast);
+  font-weight: var(--fw-600);
 }
 
 .mailpro-form-group:focus-within .mailpro-label,
 .mailpro-form-group:focus-within label {
-  color: var(--text-primary);
+  color: var(--accent-primary);
 }
 
-.mailpro-form-control, input, select, textarea {
+.mailpro-form-control,
+input,
+select,
+textarea {
   width: 100%;
-  background: linear-gradient(135deg, var(--bg-color) 0%, rgba(20, 20, 20, 0.5) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, var(--surface-bg) 0%, var(--surface-primary) 100%);
+  border: 1px solid var(--border-default);
   color: var(--text-primary);
-  padding: 0.875rem 1.25rem;
+  padding: var(--space-2) var(--space-2_5);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--fs-base);
   border-radius: var(--radius-md);
-  transition: all var(--transition-normal);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-inset-sm);
 }
 
-.mailpro-form-control:focus, input:focus, select:focus, textarea:focus {
+.mailpro-form-control::placeholder,
+input::placeholder,
+select::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.mailpro-form-control:focus,
+input:focus,
+select:focus,
+textarea:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 12px rgba(255, 255, 255, 0.1);
-  background: linear-gradient(135deg, var(--bg-color) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: var(--accent-primary);
+  box-shadow:
+    var(--shadow-clay-inset-sm),
+    0 0 0 3px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, var(--surface-bg) 0%, rgba(255, 255, 255, 0.02) 100%);
 }
 
-/* Features Grid */
-.mailpro-features, .mailpro-grid {
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ========================================
+   GRIDS & LAYOUTS
+   ======================================== */
+
+.mailpro-features,
+.mailpro-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2.5rem;
-  margin-bottom: 4rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+@media (max-width: 768px) {
+  .mailpro-features,
+  .mailpro-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
 }
 
 .mailpro-feature-card {
-  background: linear-gradient(135deg, rgba(20, 20, 20, 0.6) 0%, rgba(10, 10, 10, 0.8) 100%);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 2.5rem;
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid var(--border-default);
+  padding: var(--space-4);
   border-radius: var(--radius-lg);
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-md);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .mailpro-feature-card::after {
@@ -461,16 +1265,16 @@ a:hover {
   right: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
   opacity: 0;
-  transition: opacity var(--transition-normal);
+  transition: opacity var(--transition-base);
   pointer-events: none;
 }
 
 .mailpro-feature-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-6px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-lg);
+  transform: translateY(-4px);
 }
 
 .mailpro-feature-card:hover::after {
@@ -479,178 +1283,382 @@ a:hover {
 
 .mailpro-feature-title {
   font-family: var(--font-mono);
-  font-size: 1rem;
-  margin-bottom: 1rem;
+  font-size: var(--fs-lg);
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-1_5);
   text-transform: uppercase;
-  transition: color var(--transition-normal);
-  font-weight: 600;
+  transition: color var(--transition-base);
+  font-weight: var(--fw-700);
   letter-spacing: 0.05em;
+  color: var(--accent-primary);
 }
 
 .mailpro-feature-card:hover .mailpro-feature-title {
-  color: var(--accent-hover);
+  color: var(--accent-secondary);
 }
 
 .mailpro-feature-description {
   color: var(--text-secondary);
-  line-height: 1.7;
-  transition: color var(--transition-normal);
+  line-height: var(--lh-relaxed);
+  transition: color var(--transition-base);
+  flex-grow: 1;
 }
 
 .mailpro-feature-card:hover .mailpro-feature-description {
   color: var(--text-primary);
 }
 
-/* Footer */
+/* ========================================
+   FOOTER - Premium Multi-Column Enhanced
+   ======================================== */
+
 .mailpro-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 4rem 2.5rem;
+  border-top: 2px solid var(--border-default);
+  padding: var(--space-8) var(--space-4);
   margin-top: auto;
-  background: linear-gradient(180deg, var(--bg-color) 0%, rgba(0, 0, 0, 0.8) 100%);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, var(--surface-primary) 0%, var(--surface-bg) 100%);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-base);
+  position: relative;
+  z-index: var(--z-base);
+}
+
+.mailpro-footer:hover {
+  border-top-color: var(--border-strong);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .mailpro-footer-content {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 3rem;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.mailpro-footer-section {
+  animation: slideInUp 0.6s ease-out;
+  display: flex;
+  flex-direction: column;
 }
 
 .mailpro-footer-title {
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-primary);
-  margin-bottom: 1.75rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 0.75rem;
-  transition: border-color var(--transition-normal);
+  letter-spacing: 0.08em;
+  color: var(--accent-primary);
+  margin-bottom: var(--space-3);
+  border-bottom: 2px solid var(--border-default);
+  padding-bottom: var(--space-1_5);
+  transition: all var(--transition-base);
+  font-weight: var(--fw-700);
+}
+
+.mailpro-footer-title::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
+  margin-top: -2px;
+  transition: width var(--transition-base);
+}
+
+.mailpro-footer-section:hover .mailpro-footer-title::after {
+  width: 100%;
 }
 
 .mailpro-footer-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
+  gap: var(--space-1_5);
 }
 
 .mailpro-footer-link {
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
   color: var(--text-secondary);
   text-transform: uppercase;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-base);
   position: relative;
   display: inline-block;
+  letter-spacing: 0.03em;
+  font-weight: var(--fw-500);
 }
 
-.mailpro-footer-link::after {
+.mailpro-footer-link::before {
   content: '';
   position: absolute;
   bottom: -2px;
   left: 0;
   width: 0;
-  height: 1px;
-  background: linear-gradient(90deg, var(--accent-color), transparent);
-  transition: width var(--transition-normal);
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
+  transition: width var(--transition-base);
 }
 
 .mailpro-footer-link:hover {
   color: var(--text-primary);
-  transform: translateX(4px);
+  transform: translateX(2px);
 }
 
-.mailpro-footer-link:hover::after {
+.mailpro-footer-link:hover::before {
   width: 100%;
 }
 
+.mailpro-footer-link:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.mailpro-footer-social {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  align-items: flex-start;
+}
+
+.mailpro-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+.mailpro-social-link:hover {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
+  color: var(--surface-bg);
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: var(--shadow-clay-outset-md);
+  border-color: var(--accent-primary);
+}
+
+.mailpro-social-link svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.mailpro-footer-newsletter {
+  margin-top: var(--space-2);
+}
+
+.mailpro-newsletter-form {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.mailpro-newsletter-input {
+  flex: 1;
+  background: linear-gradient(135deg, var(--surface-bg) 0%, var(--surface-primary) 100%);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  padding: var(--space-1_5) var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-inset-sm);
+}
+
+.mailpro-newsletter-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.mailpro-newsletter-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-clay-inset-sm), 0 0 0 3px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, var(--surface-bg) 0%, rgba(255, 255, 255, 0.02) 100%);
+}
+
+.mailpro-newsletter-btn {
+  padding: var(--space-1_5) var(--space-2);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
+  border: 1px solid var(--accent-primary);
+  color: var(--surface-bg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+.mailpro-newsletter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-clay-outset-md);
+}
+
+.mailpro-newsletter-btn:active {
+  animation: clayPress 0.2s ease-out forwards;
+}
+
 .mailpro-footer-bottom {
-  max-width: 1200px;
-  margin: 3rem auto 0;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-default);
   display: flex;
   justify-content: space-between;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  gap: 2rem;
+  gap: var(--space-2);
   flex-wrap: wrap;
+  align-items: center;
 }
 
-/* Specific Page Elements */
+.mailpro-copyright {
+  margin: 0;
+  flex: 1;
+}
+
+.mailpro-footer-meta {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mailpro-footer-year {
+  display: inline;
+}
+
+.mailpro-footer-divider {
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .mailpro-footer {
+    padding: var(--space-6) var(--space-3);
+  }
+
+  .mailpro-footer-content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .mailpro-footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-1_5);
+  }
+
+  .mailpro-copyright {
+    order: 1;
+  }
+
+  .mailpro-footer-meta {
+    order: 2;
+    justify-content: center;
+  }
+
+  .mailpro-newsletter-form {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .mailpro-footer-content {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .mailpro-footer {
+    padding: var(--space-4) var(--space-2);
+  }
+}
+
+/* ========================================
+   SPECIFIC ELEMENTS
+   ======================================== */
+
 .mailpro-button-group {
   display: flex;
-  gap: 1.25rem;
+  gap: var(--space-3);
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 2.5rem;
+  margin-top: var(--space-4);
   animation: slideInUp 0.6s ease-out;
 }
 
 /* Status Messages */
 .mailpro-status-message {
-  padding: 1.25rem;
-  border: 1px solid var(--border-color);
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
   backdrop-filter: blur(10px);
   animation: slideInUp 0.4s ease-out;
+  box-shadow: var(--shadow-clay-outset-sm);
 }
 
 .mailpro-status-success {
-  border-color: rgba(0, 255, 0, 0.3);
-  color: #00ff00;
-  box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.1);
+  border-color: var(--success-dark);
+  color: var(--success-dark);
+  background: linear-gradient(135deg, rgba(61, 107, 61, 0.1) 0%, transparent 100%);
 }
 
 .mailpro-status-error {
-  border-color: rgba(255, 0, 0, 0.3);
-  color: #ff0000;
-  box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.1);
+  border-color: var(--error-dark);
+  color: var(--error-dark);
+  background: linear-gradient(135deg, rgba(107, 61, 61, 0.1) 0%, transparent 100%);
 }
 
 .mailpro-status-info {
-  border-color: rgba(0, 136, 255, 0.3);
-  color: #0088ff;
-  box-shadow: inset 0 0 20px rgba(0, 136, 255, 0.1);
+  border-color: var(--info-dark);
+  color: var(--info-dark);
+  background: linear-gradient(135deg, rgba(61, 90, 107, 0.1) 0%, transparent 100%);
 }
 
 .mailpro-status-warning {
-  border-color: rgba(255, 255, 0, 0.3);
-  color: #ffff00;
-  box-shadow: inset 0 0 20px rgba(255, 255, 0, 0.1);
+  border-color: var(--warning-dark);
+  color: var(--warning-dark);
+  background: linear-gradient(135deg, rgba(107, 99, 64, 0.1) 0%, transparent 100%);
 }
 
 /* Tables */
 .mailpro-table-container {
   overflow-x: auto;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-clay-outset-md);
+  border: 1px solid var(--border-default);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-4);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
 }
 
 th, td {
-  padding: 1.25rem 1rem;
+  padding: var(--space-2) var(--space-2);
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-subtle);
   transition: all var(--transition-fast);
 }
 
@@ -658,29 +1666,30 @@ th {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-secondary);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
-  font-weight: 600;
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
+  font-weight: var(--fw-700);
+  border-bottom: 1px solid var(--border-default);
 }
 
 tr:hover td {
   background-color: rgba(255, 255, 255, 0.02);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  border-bottom-color: var(--border-default);
 }
 
-/* Inbox specifics */
+/* Email list */
 .mailpro-email-list {
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
-  background: linear-gradient(135deg, rgba(20, 20, 20, 0.4) 0%, rgba(10, 10, 10, 0.6) 100%);
+  box-shadow: var(--shadow-clay-outset-md);
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
 }
 
 .mailpro-email-item {
-  padding: 1.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
 }
@@ -693,13 +1702,13 @@ tr:hover td {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-  transition: left 0.6s ease;
+  transition: left 0.8s ease;
   pointer-events: none;
 }
 
 .mailpro-email-item:hover {
-  background-color: rgba(255, 255, 255, 0.02);
-  transform: translateX(4px);
+  background-color: rgba(255, 255, 255, 0.03);
+  transform: translateX(2px);
 }
 
 .mailpro-email-item:hover::before {
@@ -708,36 +1717,37 @@ tr:hover td {
 
 .mailpro-email-from {
   font-family: var(--font-mono);
-  font-size: 0.875rem;
-  margin-bottom: 0.75rem;
-  color: var(--accent-color);
+  font-size: var(--fs-xs);
+  margin-bottom: var(--space-1);
+  color: var(--accent-primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: var(--fw-700);
 }
 
 .mailpro-email-subject {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-600);
+  margin-bottom: var(--space-1);
   transition: color var(--transition-fast);
 }
 
 .mailpro-email-item:hover .mailpro-email-subject {
-  color: var(--accent-hover);
+  color: var(--accent-secondary);
 }
 
 .mailpro-email-snippet {
   color: var(--text-secondary);
-  font-size: 0.875rem;
-  line-height: 1.6;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
 }
 
 /* Tabs */
 .mailpro-tabs {
   display: flex;
-  gap: 1.5rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
-  margin-bottom: 2rem;
+  gap: var(--space-4);
+  border-bottom: 2px solid var(--border-default);
+  margin-bottom: var(--space-4);
   flex-wrap: wrap;
 }
 
@@ -746,14 +1756,14 @@ tr:hover td {
   border: none;
   color: var(--text-secondary);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
-  padding: 0.75rem 0;
+  font-size: var(--fs-sm);
+  padding: var(--space-2) 0;
   cursor: pointer;
   border-bottom: 2px solid transparent;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  font-weight: 500;
-  transition: all var(--transition-normal);
+  font-weight: var(--fw-600);
+  transition: all var(--transition-base);
   position: relative;
 }
 
@@ -764,8 +1774,8 @@ tr:hover td {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent-color), transparent);
-  transition: width var(--transition-normal);
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
+  transition: width var(--transition-base);
 }
 
 .mailpro-tab-btn:hover {
@@ -777,29 +1787,33 @@ tr:hover td {
 }
 
 .mailpro-tab-btn.mailpro-tab-active {
-  color: var(--text-primary);
-  border-bottom-color: var(--accent-color);
+  color: var(--accent-primary);
+  border-bottom-color: var(--accent-primary);
 }
 
 .mailpro-tab-btn.mailpro-tab-active::after {
   width: 100%;
 }
 
-/* Admin Stats */
-.mailpro-stats, .mailpro-summary-grid, .mailpro-details-grid {
+/* Stats & Summary */
+.mailpro-stats,
+.mailpro-summary-grid,
+.mailpro-details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
-.mailpro-stat-card, .mailpro-summary-card, .mailpro-detail-item {
-  background: linear-gradient(135deg, rgba(20, 20, 20, 0.6) 0%, rgba(10, 10, 10, 0.4) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 2rem;
+.mailpro-stat-card,
+.mailpro-summary-card,
+.mailpro-detail-item {
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border: 1px solid var(--border-default);
+  padding: var(--space-4);
   border-radius: var(--radius-lg);
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-md);
   position: relative;
   overflow: hidden;
 }
@@ -812,38 +1826,44 @@ tr:hover td {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-  transition: left 0.6s ease;
+  transition: left 0.8s ease;
   pointer-events: none;
 }
 
-.mailpro-stat-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+.mailpro-stat-card:hover,
+.mailpro-summary-card:hover,
+.mailpro-detail-item:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-lg);
+  transform: translateY(-2px);
 }
 
 .mailpro-stat-card:hover::before {
   left: 100%;
 }
 
-.mailpro-stat-number, .mailpro-summary-value {
-  font-size: 2.5rem;
+.mailpro-stat-number,
+.mailpro-summary-value {
+  font-size: var(--fs-4xl);
   font-family: var(--font-mono);
-  font-weight: 700;
-  margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+  font-weight: var(--fw-700);
+  margin-bottom: var(--space-1);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.mailpro-stat-label, .mailpro-summary-label, .mailpro-detail-label {
+.mailpro-stat-label,
+.mailpro-summary-label,
+.mailpro-detail-label {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-xs);
   text-transform: uppercase;
   color: var(--text-secondary);
   letter-spacing: 0.05em;
-  transition: color var(--transition-normal);
+  transition: color var(--transition-base);
+  font-weight: var(--fw-600);
 }
 
 .mailpro-stat-card:hover .mailpro-stat-label,
@@ -852,46 +1872,268 @@ tr:hover td {
   color: var(--text-primary);
 }
 
-/* Utils */
-.mailpro-badge, .mailpro-status {
-  display: inline-block;
-  padding: 0.35rem 0.75rem;
+/* ========================================
+   MESSAGE & NOTIFICATION STYLES
+   ======================================== */
+
+.mailpro-message {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--fs-sm);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+  backdrop-filter: blur(10px);
+  animation: slideInUp 0.4s ease-out;
+  box-shadow: var(--shadow-clay-outset-sm);
+  display: none;
+  transition: all var(--transition-base);
+}
+
+.mailpro-message-success {
+  border-color: rgba(61, 107, 61, 0.5);
+  color: rgba(107, 200, 107, 1);
+  background: linear-gradient(135deg, rgba(61, 107, 61, 0.08) 0%, transparent 100%);
+}
+
+.mailpro-message-error {
+  border-color: rgba(200, 100, 100, 0.5);
+  color: rgba(220, 120, 120, 1);
+  background: linear-gradient(135deg, rgba(107, 61, 61, 0.08) 0%, transparent 100%);
+}
+
+.mailpro-message-warning {
+  border-color: rgba(150, 130, 80, 0.5);
+  color: rgba(200, 170, 130, 1);
+  background: linear-gradient(135deg, rgba(107, 99, 64, 0.08) 0%, transparent 100%);
+}
+
+.mailpro-message-info {
+  border-color: rgba(100, 140, 180, 0.5);
+  color: rgba(150, 180, 210, 1);
+  background: linear-gradient(135deg, rgba(61, 90, 107, 0.08) 0%, transparent 100%);
+}
+
+.mailpro-rate-limit-warning {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+  background: linear-gradient(135deg, rgba(200, 100, 100, 0.1) 0%, transparent 100%);
+  color: rgba(220, 120, 120, 1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  animation: slideInUp 0.4s ease-out;
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+/* Status badges */
+.mailpro-status {
+  display: inline-block;
+  padding: var(--space-0_5) var(--space-1_5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
   text-transform: uppercase;
   border: 1px solid currentColor;
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: var(--fw-700);
   letter-spacing: 0.05em;
   transition: all var(--transition-fast);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+  cursor: default;
 }
 
-.mailpro-badge:hover, .mailpro-status:hover {
+.mailpro-status:hover,
+.mailpro-badge:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 12px currentColor;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+}
+
+.mailpro-status-success {
+  color: rgba(107, 200, 107, 1);
+  border-color: rgba(107, 200, 107, 0.5);
+}
+
+.mailpro-status-danger {
+  color: rgba(220, 120, 120, 1);
+  border-color: rgba(220, 120, 120, 0.5);
+}
+
+.mailpro-status-warning {
+  color: rgba(200, 170, 130, 1);
+  border-color: rgba(200, 170, 130, 0.5);
+}
+
+.mailpro-status-info {
+  color: rgba(150, 180, 210, 1);
+  border-color: rgba(150, 180, 210, 0.5);
+}
+
+.mailpro-status-default {
+  color: var(--text-secondary);
+  border-color: var(--border-default);
 }
 
 .mailpro-status-premium {
-  color: #ffff00;
-  border-color: rgba(255, 255, 0, 0.3);
-  text-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+  color: rgba(200, 170, 140, 1);
+  border-color: rgba(200, 170, 140, 0.3);
 }
 
 .mailpro-status-public {
-  color: #00ff00;
-  border-color: rgba(0, 255, 0, 0.3);
-  text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+  color: rgba(150, 180, 150, 1);
+  border-color: rgba(150, 180, 150, 0.3);
 }
 
-.mailpro-feature-title {
-  filter: grayscale(0);
+/* ========================================
+   TAB STYLING ENHANCEMENTS
+   ======================================== */
+
+.mailpro-tab-content {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.mailpro-tab-active .mailpro-tab-btn {
+  color: var(--accent-primary);
+}
+
+/* ========================================
+   TEXTAREA STYLING
+   ======================================== */
+
+.mailpro-textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+/* ========================================
+   CHECKBOX AND LABEL STYLING
+   ======================================== */
+
+.mailpro-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1_5);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+  user-select: none;
+}
+
+.mailpro-checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-primary);
+}
+
+.mailpro-checkbox-label:hover {
+  color: var(--text-primary);
+}
+
+/* ========================================
+   DETAIL ITEMS STYLING
+   ======================================== */
+
+.mailpro-detail-item {
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border: 1px solid var(--border-default);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.mailpro-detail-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  transition: left 0.8s ease;
+  pointer-events: none;
+}
+
+.mailpro-detail-item:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-lg);
+  transform: translateY(-2px);
+}
+
+.mailpro-detail-item:hover::before {
+  left: 100%;
+}
+
+.mailpro-detail-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  transition: color var(--transition-base);
+  font-weight: var(--fw-600);
+  margin-bottom: var(--space-1);
+}
+
+.mailpro-detail-item:hover .mailpro-detail-label {
+  color: var(--text-primary);
+}
+
+.mailpro-detail-value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  font-weight: var(--fw-500);
+  word-break: break-word;
+}
+
+/* ========================================
+   STATS MINI STYLING
+   ======================================== */
+
+.mailpro-stats-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.mailpro-stat-mini {
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border: 1px solid var(--border-default);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+.mailpro-stat-mini-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: var(--fw-600);
+}
+
+.mailpro-stat-mini-value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-700);
+  color: var(--accent-primary);
 }
 
 .mailpro-account-selector {
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
   align-items: flex-end;
 }
 
@@ -899,177 +2141,196 @@ tr:hover td {
   flex: 1;
 }
 
+/* Email detail */
 .mailpro-email-detail {
-  background: linear-gradient(135deg, var(--surface-color) 0%, rgba(20, 20, 20, 0.8) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  margin-top: 2rem;
-  box-shadow: var(--shadow-md);
+  padding: var(--space-5);
+  margin-top: var(--space-4);
+  box-shadow: var(--shadow-clay-outset-lg);
   animation: slideInUp 0.5s ease-out;
 }
 
 .mailpro-email-meta {
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--fs-sm);
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
-  transition: all var(--transition-normal);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-inset-sm);
 }
 
 .mailpro-email-meta:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-strong);
 }
 
 .mailpro-email-body {
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
-  padding: 1.75rem;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, var(--bg-color) 100%);
-  line-height: 1.8;
+  padding: var(--space-3);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, var(--surface-bg) 100%);
+  line-height: var(--lh-relaxed);
+  box-shadow: var(--shadow-clay-inset-sm);
 }
 
 .mailpro-email-raw-content {
   white-space: pre-wrap;
   word-break: break-all;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-xs);
   color: var(--text-secondary);
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   max-height: 400px;
   overflow-y: auto;
 }
 
 .mailpro-view-btn {
-  margin-right: 0.75rem;
+  margin-right: var(--space-1);
 }
 
 .mailpro-view-btn-active {
-  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
-  color: var(--bg-color);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
+  color: var(--surface-bg);
+  box-shadow: var(--shadow-clay-outset-md);
 }
 
-/* Compose */
+/* Compose panel */
 .mailpro-compose-panel {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  background: linear-gradient(135deg, var(--surface-color) 0%, rgba(20, 20, 20, 0.8) 100%);
-  box-shadow: var(--shadow-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  box-shadow: var(--shadow-clay-outset-lg);
   animation: slideInUp 0.5s ease-out;
 }
 
 .mailpro-compose-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 1rem;
+  margin-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-default);
+  padding-bottom: var(--space-2);
+  gap: var(--space-2);
 }
 
 .mailpro-btn-close {
   background: none;
   border: none;
   color: var(--text-secondary);
-  font-size: 1.5rem;
+  font-size: var(--fs-xl);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-base);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
   opacity: 0.7;
+  padding: 0;
 }
 
 .mailpro-btn-close:hover {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.1);
   opacity: 1;
+  box-shadow: var(--shadow-clay-outset-sm);
 }
 
 .mailpro-compose-textarea {
-  min-height: 250px;
+  min-height: 200px;
 }
 
+/* Premium/Special states */
 .mailpro-premium-account-block {
   text-align: center;
-  padding: 3.5rem;
-  border: 2px dashed rgba(255, 255, 255, 0.15);
-  margin-bottom: 2rem;
+  padding: var(--space-6);
+  border: 2px dashed var(--border-strong);
+  margin-bottom: var(--space-4);
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
   animation: slideInUp 0.5s ease-out;
+  box-shadow: var(--shadow-clay-outset-md);
 }
 
 .mailpro-premium-actions {
-  margin-top: 2rem;
+  margin-top: var(--space-4);
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
+  gap: var(--space-3);
   flex-wrap: wrap;
 }
 
-.mailpro-error, .mailpro-loading, .mailpro-no-emails {
+.mailpro-error,
+.mailpro-loading,
+.mailpro-no-emails {
   text-align: center;
-  padding: 3.5rem;
+  padding: var(--space-6);
   font-family: var(--font-mono);
   color: var(--text-secondary);
   animation: slideInUp 0.5s ease-out;
 }
 
+/* Policy & Lists */
 .mailpro-policy-list {
-  padding-left: 2rem;
-  margin-bottom: 1.5rem;
+  padding-left: var(--space-4);
+  margin-bottom: var(--space-3);
   list-style: none;
 }
 
 .mailpro-policy-list li {
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-1_5);
   position: relative;
-  padding-left: 1.25rem;
+  padding-left: var(--space-2);
 }
 
 .mailpro-policy-list li::before {
   content: '→';
   position: absolute;
   left: 0;
-  color: var(--accent-color);
+  color: var(--accent-primary);
+  font-weight: var(--fw-700);
 }
 
-.mailpro-about-tech-grid, .mailpro-credits-grid {
+/* Tech grid */
+.mailpro-about-tech-grid,
+.mailpro-credits-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
 }
 
-.mailpro-about-tech-item, .mailpro-expertise-category, .mailpro-credits-category {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.mailpro-about-tech-item,
+.mailpro-expertise-category,
+.mailpro-credits-category {
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
-  padding: 2rem;
-  background: linear-gradient(135deg, rgba(20, 20, 20, 0.6) 0%, rgba(10, 10, 10, 0.4) 100%);
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-md);
+  padding: var(--space-4);
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-md);
 }
 
 .mailpro-about-tech-item:hover,
 .mailpro-expertise-category:hover,
 .mailpro-credits-category:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-lg);
+  transform: translateY(-3px);
 }
 
-.mailpro-skills-list, .mailpro-credits-list, .mailpro-facts-list, .mailpro-focus-list {
+.mailpro-skills-list,
+.mailpro-credits-list,
+.mailpro-facts-list,
+.mailpro-focus-list {
   list-style: none;
   padding-left: 0;
 }
@@ -1078,10 +2339,11 @@ tr:hover td {
 .mailpro-credits-list li,
 .mailpro-facts-list li,
 .mailpro-focus-list li {
-  padding-left: 1.5rem;
-  margin-bottom: 0.75rem;
+  padding-left: var(--space-2);
+  margin-bottom: var(--space-1_5);
   position: relative;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-base);
+  color: var(--text-secondary);
 }
 
 .mailpro-skills-list li::before,
@@ -1091,28 +2353,46 @@ tr:hover td {
   content: '◆';
   position: absolute;
   left: 0;
-  color: var(--accent-color);
+  color: var(--accent-primary);
+  font-size: 0.6em;
+  margin-top: 0.4em;
 }
 
 .mailpro-skills-list li:hover,
 .mailpro-credits-list li:hover,
 .mailpro-facts-list li:hover,
 .mailpro-focus-list li:hover {
-  transform: translateX(4px);
-  color: var(--accent-hover);
+  transform: translateX(2px);
+  color: var(--accent-primary);
 }
 
+/* ========================================
+   RESPONSIVE - Mobile First
+   ======================================== */
+
 @media (max-width: 768px) {
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.5rem; }
-  h3 { font-size: 1.25rem; }
+  :root {
+    --space-4: 1.5rem;
+    --space-5: 2rem;
+    --space-6: 2.5rem;
+    --space-8: 3rem;
+  }
+
+  h1 { font-size: var(--fs-3xl); }
+  h2 { font-size: var(--fs-2xl); }
+  h3 { font-size: var(--fs-xl); }
 
   .mailpro-navbar {
-    padding: 1rem 1.5rem;
+    padding: var(--space-2) var(--space-3);
   }
 
   .mailpro-nav {
     display: none;
+  }
+
+  .mailpro-card,
+  .card {
+    padding: var(--space-3);
   }
 
   .mailpro-account-selector {
@@ -1120,29 +2400,1200 @@ tr:hover td {
     align-items: stretch;
   }
 
-  .container {
-    padding: 0 1.5rem;
-  }
-
-  .mailpro-features, .mailpro-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .mailpro-stats, .mailpro-summary-grid, .mailpro-details-grid {
+  .mailpro-features,
+  .mailpro-grid {
     grid-template-columns: 1fr;
   }
 
-  .mailpro-card, .card {
-    padding: 1.5rem;
+  .mailpro-stats,
+  .mailpro-summary-grid,
+  .mailpro-details-grid {
+    grid-template-columns: 1fr;
   }
 
   .mailpro-footer-content {
     grid-template-columns: 1fr;
-    gap: 2rem;
   }
 
   .mailpro-footer-bottom {
     flex-direction: column;
+    text-align: center;
   }
+
+  .mailpro-button-group {
+    flex-direction: column;
+  }
+
+  .mailpro-button-group .btn,
+  .mailpro-button-group .mailpro-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --fs-4xl: 1.875rem;
+    --fs-3xl: 1.5rem;
+    --fs-2xl: 1.25rem;
+  }
+
+  h1 { font-size: var(--fs-2xl); }
+  h2 { font-size: var(--fs-xl); }
+  h3 { font-size: var(--fs-lg); }
+
+  .container {
+    padding: var(--space-1_5);
+  }
+
+  .mailpro-header {
+    padding: var(--space-4) var(--space-2);
+  }
+
+  .mailpro-card,
+  .card {
+    padding: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .mailpro-compose-panel {
+    padding: var(--space-3);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY & UTILITIES
+   ======================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.opacity-50 {
+  opacity: 0.5;
+}
+
+.opacity-75 {
+  opacity: 0.75;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+
+
+/* ========================================
+   ENHANCED EMAIL READER - MULTI-MODE STYLES
+   ======================================== */
+
+.mailpro-email-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-default);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.mailpro-email-view-controls {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.mailpro-view-btn {
+  padding: var(--space-1_5) var(--space-2_5);
+  font-size: var(--fs-xs);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border: 1px solid var(--border-default);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  cursor: pointer;
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+.mailpro-view-btn:hover {
+  border-color: var(--border-strong);
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-elevation-1) 100%);
+  box-shadow: var(--shadow-clay-outset-md);
+  transform: translateY(-1px);
+}
+
+.mailpro-view-btn-active {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
+  color: var(--surface-bg);
+  box-shadow: var(--shadow-clay-outset-lg);
+  border-color: var(--accent-primary);
+  font-weight: var(--fw-700);
+}
+
+.mailpro-email-metadata {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, transparent 100%);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  animation: slideInUp 0.5s ease-out;
+  box-shadow: var(--shadow-clay-inset-sm);
+}
+
+.mailpro-email-subject-detail {
+  font-size: var(--fs-4xl);
+  margin-bottom: var(--space-3);
+  word-break: break-word;
+  line-height: var(--lh-tight);
+  font-weight: var(--fw-700);
+}
+
+.mailpro-email-meta-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1_5);
+}
+
+.mailpro-email-meta-row {
+  display: flex;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  font-family: var(--font-mono);
+  align-items: flex-start;
+}
+
+.mailpro-meta-label {
+  color: var(--text-secondary);
+  font-weight: var(--fw-700);
+  min-width: 100px;
+  text-transform: uppercase;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.mailpro-meta-value {
+  color: var(--text-primary);
+  word-break: break-word;
+  flex: 1;
+  font-weight: var(--fw-500);
+}
+
+.mailpro-email-content-display {
+  display: none;
+}
+
+.mailpro-email-text-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.mailpro-email-text-content {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, var(--surface-bg) 100%);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--text-primary);
+  overflow-x: auto;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  max-height: 600px;
+  overflow-y: auto;
+  box-shadow: var(--shadow-clay-inset-sm);
+}
+
+.mailpro-email-html-container {
+  animation: fadeIn 0.3s ease-out;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-clay-outset-md);
+}
+
+.mailpro-html-sandbox-warning {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid var(--border-strong);
+  border-bottom: none;
+  color: var(--text-secondary);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--fw-600);
+}
+
+.mailpro-email-html-frame {
+  display: block;
+  width: 100%;
+  min-height: 400px;
+  border: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  background: var(--surface-bg);
+}
+
+.mailpro-email-raw-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.mailpro-raw-info {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid var(--border-strong);
+  border-bottom: none;
+  color: var(--text-secondary);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--fw-600);
+}
+
+.mailpro-email-raw-content {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+  padding: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  max-height: 600px;
+  overflow-y: auto;
+  margin: 0;
+  box-shadow: var(--shadow-clay-inset-sm);
+  line-height: var(--lh-relaxed);
+}
+
+/* ========================================
+   EMAIL DATE STYLING
+   ======================================== */
+
+.mailpro-email-date {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  margin-top: var(--space-1);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mailpro-date {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mailpro-email {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  word-break: break-word;
+}
+
+/* ========================================
+   PREMIUM ACCOUNT BLOCK ENHANCEMENTS
+   ======================================== */
+
+.mailpro-premium-account-block {
+  text-align: center;
+  padding: var(--space-6);
+  border: 2px dashed var(--border-strong);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+  animation: slideInUp 0.5s ease-out;
+  box-shadow: var(--shadow-clay-outset-md);
+  transition: all var(--transition-base);
+}
+
+.mailpro-premium-account-block:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-clay-outset-lg);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, transparent 100%);
+}
+
+.mailpro-premium-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-2);
+  color: var(--accent-primary);
+  font-weight: var(--fw-700);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mailpro-premium-account-block h3 {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.mailpro-premium-account-block p {
+  color: var(--text-secondary);
+  line-height: var(--lh-relaxed);
+  margin-bottom: var(--space-2);
+}
+
+.mailpro-premium-account-block strong {
+  color: var(--accent-primary);
+  font-weight: var(--fw-700);
+}
+
+/* ========================================
+   MOBILE RESPONSIVE ENHANCEMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+  .mailpro-compose-panel {
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+
+  .mailpro-email-detail-header {
+    flex-direction: column;
+  }
+
+  .mailpro-email-view-controls {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--space-1);
+  }
+
+  .mailpro-view-btn {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--fs-xs);
+  }
+
+  .mailpro-compose-header {
+    flex-wrap: wrap;
+  }
+
+  .mailpro-admin-title {
+    font-size: var(--fs-3xl);
+  }
+
+  .mailpro-admin-section-title {
+    font-size: var(--fs-xl);
+  }
+
+  .mailpro-compose-actions {
+    flex-direction: column;
+  }
+
+  .mailpro-compose-actions .mailpro-btn {
+    width: 100%;
+  }
+
+  .mailpro-email-text-content,
+  .mailpro-email-raw-content {
+    max-height: 350px;
+    font-size: var(--fs-xs);
+  }
+
+  .mailpro-html-preview-frame {
+    min-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mailpro-compose-panel {
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+  }
+
+  .mailpro-compose-header h3 {
+    font-size: var(--fs-lg);
+  }
+
+  .mailpro-email-subject-detail {
+    font-size: var(--fs-2xl);
+  }
+
+  .mailpro-email-detail {
+    padding: var(--space-2);
+  }
+
+  .mailpro-email-metadata {
+    padding: var(--space-3);
+  }
+
+  .mailpro-button-group {
+    flex-direction: column;
+  }
+
+  .mailpro-button-group .btn,
+  .mailpro-button-group .mailpro-btn {
+    width: 100%;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY & FOCUS STATES
+   ======================================== */
+
+.mailpro-btn:focus-visible,
+.mailpro-view-btn:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.mailpro-form-control:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 1px;
+}
+
+/* ========================================
+   ADMIN SPECIFIC TITLE STYLING
+   ======================================== */
+
+.mailpro-admin-title {
+  font-size: var(--fs-4xl);
+  font-weight: var(--fw-700);
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-family: var(--font-mono);
+  margin-bottom: var(--space-2);
+}
+
+.mailpro-admin-description {
+  color: var(--text-secondary);
+  font-size: var(--fs-lg);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--fw-600);
+  margin-bottom: var(--space-4);
+}
+
+.mailpro-admin-section-title {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-700);
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--border-default);
+}
+
+.mailpro-admin-section-title::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
+  margin-top: -2px;
+  transition: width var(--transition-base);
+}
+
+.mailpro-card:hover .mailpro-admin-section-title::after {
+  width: 100%;
+}
+
+.mailpro-controls {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.mailpro-controls .mailpro-btn {
+  flex: 1;
+  min-width: 150px;
+}
+
+@media (max-width: 768px) {
+  .mailpro-controls {
+    flex-direction: column;
+  }
+
+  .mailpro-controls .mailpro-btn {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* ========================================
+   INBOX HEADER STYLING
+   ======================================== */
+
+.mailpro-inbox-title {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  font-weight: var(--fw-700);
+}
+
+.mailpro-inbox-subtitle {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: var(--fs-sm);
+}
+
+.mailpro-header-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .mailpro-header-actions {
+    flex-direction: column;
+  }
+
+  .mailpro-header-actions .mailpro-btn {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   ENHANCED ADMIN UI STYLES - DARK CLAYMORPHISM
+   ======================================== */
+
+.mailpro-admin-filters {
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border-radius: 12px;
+  border: 1px solid var(--border-default);
+  padding: 1.5rem;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-md);
+}
+
+.mailpro-admin-filters:hover {
+  box-shadow: var(--shadow-clay-outset-lg);
+  border-color: var(--border-strong);
+}
+
+.mailpro-filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.mailpro-filters-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mailpro-filters-panel {
+  animation: slideInUp 0.3s ease;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: var(--shadow-clay-inset-sm);
+}
+
+.mailpro-filter-results {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+  border-left: 3px solid var(--accent-primary);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-family: var(--font-mono);
+}
+
+.mailpro-monitoring-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  margin-top: 1.5rem;
+}
+
+.mailpro-monitor-stat {
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-clay-outset-md);
+}
+
+.mailpro-monitor-stat:hover {
+  border-color: var(--border-strong);
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-elevation-1) 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-clay-outset-lg);
+}
+
+.mailpro-monitor-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mailpro-monitor-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, transparent 100%);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  min-width: 3rem;
+  text-align: center;
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+}
+
+.mailpro-account-row {
+  transition: all var(--transition-base);
+}
+
+.mailpro-account-row:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.mailpro-row-locked {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid var(--accent-secondary);
+}
+
+.mailpro-row-locked:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.mailpro-lock-reason {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+}
+
+.mailpro-btn-xs {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  min-height: auto;
+  height: auto;
+  transition: all var(--transition-fast);
+}
+
+.mailpro-btn-xs:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+.mailpro-btn-small {
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8rem;
+  min-height: auto;
+  height: auto;
+  transition: all var(--transition-fast);
+}
+
+.mailpro-btn-small:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+.mailpro-btn-sm {
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
+  min-height: auto;
+  height: auto;
+  transition: all var(--transition-fast);
+}
+
+.mailpro-btn-sm:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+/* Responsive filters on mobile */
+@media (max-width: 768px) {
+  .mailpro-admin-filters {
+    padding: 1rem;
+  }
+
+  .mailpro-filters-panel {
+    padding: 1rem;
+  }
+
+  .mailpro-monitoring-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .mailpro-monitor-stat {
+    padding: 1rem;
+  }
+
+  .mailpro-table-container {
+    overflow-x: auto;
+  }
+
+  .mailpro-lock-reason {
+    max-width: 100px;
+  }
+}
+
+/* ========================================
+   ENHANCED INTERACTIVE ELEMENTS
+   ======================================== */
+
+.mailpro-btn-success,
+.btn-success {
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-clay-outset-md);
+}
+
+.mailpro-btn-success:hover:not(:disabled),
+.btn-success:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--surface-elevation-1) 0%, var(--surface-tertiary) 100%);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-lg);
+}
+
+.mailpro-btn-success:active:not(:disabled),
+.btn-success:active:not(:disabled) {
+  animation: clayPress 0.3s ease-out forwards;
+}
+
+.mailpro-btn-danger {
+  background: linear-gradient(135deg, var(--surface-tertiary) 0%, var(--surface-secondary) 100%);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-clay-outset-md);
+  color: var(--text-primary);
+}
+
+.mailpro-btn-danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--surface-elevation-1) 0%, var(--surface-tertiary) 100%);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-lg);
+}
+
+.mailpro-btn-full {
+  width: 100%;
+}
+
+/* Input enhancements */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  transition: all var(--transition-base);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  transform: translateY(-1px);
+}
+
+/* Validation messages */
+.mailpro-validation-msg {
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  margin-top: var(--space-1);
+  display: none;
+  transition: all var(--transition-fast);
+}
+
+.mailpro-validation-success {
+  color: var(--success-dark);
+}
+
+.mailpro-validation-error {
+  color: var(--error-dark);
+}
+
+/* Enhanced compose styling */
+.mailpro-compose-mode-controls {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  padding: var(--space-2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.mailpro-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.mailpro-mode-toggle input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--accent-primary);
+}
+
+.mailpro-mode-toggle:hover {
+  color: var(--text-primary);
+}
+
+.mailpro-toggle-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--fw-600);
+}
+
+/* Enhanced form sections */
+.mailpro-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.mailpro-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-3);
+}
+
+@media (max-width: 768px) {
+  .mailpro-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Textarea enhancements */
+textarea.mailpro-form-control {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+}
+
+/* HTML preview container */
+.mailpro-html-preview-container {
+  margin-top: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--surface-bg) 0%, var(--surface-primary) 100%);
+  box-shadow: var(--shadow-clay-outset-md);
+  animation: slideInUp 0.3s ease-out;
+}
+
+.mailpro-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.mailpro-preview-title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--fw-600);
+  color: var(--text-secondary);
+}
+
+.mailpro-btn-close-small {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: var(--fs-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+
+.mailpro-btn-close-small:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mailpro-html-preview-frame {
+  width: 100%;
+  min-height: 300px;
+  border: none;
+  display: block;
+  background: var(--surface-bg);
+}
+
+/* Body controls */
+.mailpro-body-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.mailpro-body-section {
+  margin-bottom: var(--space-3);
+}
+
+/* Compose actions */
+.mailpro-compose-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .mailpro-compose-actions {
+    flex-direction: column;
+  }
+
+  .mailpro-compose-actions .mailpro-btn {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   FINAL POLISH - INTERACTIONS & FEEDBACK
+   ======================================== */
+
+/* Smooth hover effects for all clickable elements */
+a,
+button,
+input[type="button"],
+input[type="submit"],
+select,
+[role="button"] {
+  transition: all var(--transition-base);
+}
+
+/* Active state indicator for selected items */
+.mailpro-email-item.active,
+tr.active {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border-left: 3px solid var(--accent-primary);
+  padding-left: calc(var(--space-3) - 3px);
+}
+
+/* Loading and empty states */
+.mailpro-loading {
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  text-align: center;
+  padding: var(--space-6) var(--space-4);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mailpro-no-emails,
+.mailpro-error {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  text-align: center;
+  padding: var(--space-6) var(--space-4);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  animation: slideInUp 0.5s ease-out;
+}
+
+/* Focus visible improvements for keyboard navigation */
+*:focus-visible {
+  outline-width: 3px;
+  outline-offset: 2px;
+  outline-color: var(--accent-primary);
+  outline-style: solid;
+  border-radius: var(--radius-sm);
+}
+
+/* Enhanced visual feedback on button interactions */
+.mailpro-btn:active:not(:disabled) {
+  animation: clayPress 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Input focus glow effect */
+input:focus,
+select:focus,
+textarea:focus {
+  box-shadow: var(--shadow-clay-inset-sm), 0 0 0 3px rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Smooth transitions for all interactive states */
+a,
+.mailpro-footer-link {
+  transition: color var(--transition-base) cubic-bezier(0.4, 0, 0.2, 1),
+              transform var(--transition-base) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scale and transform interactions */
+.mailpro-badge,
+.mailpro-status {
+  transition: transform var(--transition-fast) cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow var(--transition-fast) ease-out;
+}
+
+/* Visual feedback for disabled states */
+button:disabled,
+input:disabled,
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Table row hover effects */
+table tbody tr {
+  transition: all var(--transition-fast);
+}
+
+table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Enhance visibility of form validation */
+input.valid,
+textarea.valid,
+select.valid {
+  border-color: var(--success-dark);
+}
+
+input.invalid,
+textarea.invalid,
+select.invalid {
+  border-color: var(--error-dark);
+}
+
+/* Smooth scroll for scrollable content */
+.mailpro-email-text-content,
+.mailpro-email-raw-content {
+  scroll-behavior: smooth;
+}
+
+/* Improved readability for email content */
+.mailpro-email-body,
+.mailpro-email-text-content {
+  word-spacing: 0.05em;
+  line-height: 1.6;
+}
+
+/* Premium block focus state */
+.mailpro-premium-account-block:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-clay-outset-lg), 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Smooth horizontal rules */
+hr {
+  border: none;
+  border-top: 1px solid var(--border-default);
+  margin: var(--space-4) 0;
+  transition: border-color var(--transition-base);
+}
+
+/* Enhanced section transitions */
+.mailpro-card,
+.mailpro-stat-card,
+.mailpro-feature-card {
+  transition: all var(--transition-base);
+}
+
+/* Smooth pseudo-element transitions */
+::before,
+::after {
+  transition: all var(--transition-base);
+}
+
+/* Improved button shine effect timing */
+.mailpro-btn::before {
+  transition: left var(--transition-slowest) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Email item shimmer timing */
+.mailpro-email-item::before {
+  transition: left 0.6s ease-in-out;
+}
+
+/* Card shimmer timing */
+.mailpro-card::before,
+.mailpro-feature-card::before,
+.mailpro-stat-card::before {
+  transition: left 0.8s ease-in-out;
 }

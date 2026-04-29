@@ -74,7 +74,7 @@
                     <option value="">Loading mail nafij accounts...</option>
                 </select>
                 <button id="refreshBtn" class="mailpro-btn mailpro-btn-primary" aria-label="Refresh inbox emails">Refresh</button>
-                <button id="composeBtn" class="mailpro-btn mailpro-btn-success" aria-label="Compose new email" style="display: none;">Compose</button>
+                <button id="composeBtn" class="mailpro-btn mailpro-btn-primary" aria-label="Compose new email" style="display: none;">Compose</button>
             </div>
 
             <div id="statusMessage" class="mailpro-status-message" role="status" aria-live="polite"></div>
@@ -94,70 +94,160 @@
                 </div>
 
                 <div class="mailpro-compose-form">
-                    <div class="mailpro-form-group">
-                        <label for="composeTo" class="mailpro-label">To:</label>
-                        <input type="text" id="composeTo" class="mailpro-form-control" placeholder="recipient@example.com or email1@example.com, email2@example.com" required aria-label="Email recipient(s)">
-                        <div id="toValidationMsg" class="mailpro-validation-msg"></div>
-                    </div>
-                    <div class="mailpro-form-group">
-                        <label for="composeCc" class="mailpro-label">Cc (optional):</label>
-                        <input type="text" id="composeCc" class="mailpro-form-control" placeholder="email1@example.com, email2@example.com" aria-label="CC recipients">
-                        <div id="ccValidationMsg" class="mailpro-validation-msg"></div>
-                    </div>
-                    <div class="mailpro-form-group">
-                        <label for="composeBcc" class="mailpro-label">Bcc (optional):</label>
-                        <input type="text" id="composeBcc" class="mailpro-form-control" placeholder="email1@example.com, email2@example.com" aria-label="BCC recipients">
-                        <div id="bccValidationMsg" class="mailpro-validation-msg"></div>
-                    </div>
-                    <div class="mailpro-form-group">
-                        <label for="composeSubject" class="mailpro-label">Subject:</label>
-                        <input type="text" id="composeSubject" class="mailpro-form-control" placeholder="Email subject" required aria-label="Email subject">
-                    </div>
-
-                    <!-- HTML/Text Body Section with Preview Toggle -->
-                    <div class="mailpro-body-section">
-                        <div class="mailpro-body-controls">
-                            <label for="composeBody" class="mailpro-label">Message:</label>
-                            <button type="button" id="togglePreviewBtn" class="mailpro-btn mailpro-btn-small mailpro-btn-secondary" style="display: none;" aria-label="Toggle HTML preview">Preview</button>
+                    <div class="mailpro-form-section">
+                        <div class="mailpro-form-group">
+                            <label for="composeTo" class="mailpro-label">To:</label>
+                            <input type="text" id="composeTo" class="mailpro-form-control" placeholder="recipient@example.com or email1@example.com, email2@example.com" required aria-label="Email recipient(s)">
+                            <div id="toValidationMsg" class="mailpro-validation-msg"></div>
                         </div>
-                        <textarea id="composeBody" class="mailpro-form-control mailpro-compose-textarea" placeholder="Write your message here..." required aria-label="Email message body"></textarea>
-                        <div id="htmlPreviewContainer" class="mailpro-html-preview-container" style="display: none;">
-                            <div class="mailpro-preview-header">
-                                <span class="mailpro-preview-title">Live Preview</span>
-                                <button type="button" id="closePreviewBtn" class="mailpro-btn-close-small" aria-label="Close preview">&times;</button>
+                        <div class="mailpro-form-group">
+                            <label for="composeCc" class="mailpro-label">Cc (optional):</label>
+                            <input type="text" id="composeCc" class="mailpro-form-control" placeholder="email1@example.com, email2@example.com" aria-label="CC recipients">
+                            <div id="ccValidationMsg" class="mailpro-validation-msg"></div>
+                        </div>
+                        <div class="mailpro-form-group">
+                            <label for="composeBcc" class="mailpro-label">Bcc (optional):</label>
+                            <input type="text" id="composeBcc" class="mailpro-form-control" placeholder="email1@example.com, email2@example.com" aria-label="BCC recipients">
+                            <div id="bccValidationMsg" class="mailpro-validation-msg"></div>
+                        </div>
+                        <div class="mailpro-form-group">
+                            <label for="composeSubject" class="mailpro-label">Subject:</label>
+                            <input type="text" id="composeSubject" class="mailpro-form-control" placeholder="Email subject" required aria-label="Email subject">
+                        </div>
+
+                        <!-- HTML/Text Body Section with Preview Toggle -->
+                        <div class="mailpro-body-section">
+                            <div class="mailpro-body-controls">
+                                <label for="composeBody" class="mailpro-label">Message:</label>
+                                <button type="button" id="togglePreviewBtn" class="mailpro-btn mailpro-btn-secondary mailpro-btn-small" style="display: none;" aria-label="Toggle HTML preview">Preview</button>
                             </div>
-                            <iframe id="htmlPreviewFrame" class="mailpro-html-preview-frame" sandbox="allow-same-origin" title="HTML email preview"></iframe>
+                            <textarea id="composeBody" class="mailpro-form-control mailpro-compose-textarea" placeholder="Write your message here..." required aria-label="Email message body"></textarea>
+                            <div id="htmlPreviewContainer" class="mailpro-html-preview-container" style="display: none;">
+                                <div class="mailpro-preview-header">
+                                    <span class="mailpro-preview-title">Live Preview</span>
+                                    <button type="button" id="closePreviewBtn" class="mailpro-btn-close-small" aria-label="Close preview">&times;</button>
+                                </div>
+                                <iframe id="htmlPreviewFrame" class="mailpro-html-preview-frame" sandbox="allow-same-origin" title="HTML email preview"></iframe>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="mailpro-compose-actions">
-                        <button id="sendBtn" class="mailpro-btn mailpro-btn-success" aria-label="Send email">Send Email</button>
-                        <button id="cancelBtn" class="mailpro-btn mailpro-btn-secondary" aria-label="Cancel compose">Cancel</button>
+                        <div class="mailpro-compose-actions">
+                            <button id="sendBtn" class="mailpro-btn mailpro-btn-primary" aria-label="Send email">Send Email</button>
+                            <button id="cancelBtn" class="mailpro-btn mailpro-btn-secondary" aria-label="Cancel compose">Cancel</button>
+                        </div>
                     </div>
                     <div id="sendStatus" class="mailpro-status-message" role="status" aria-live="assertive"></div>
                 </div>
             </div>
 
+            <div class="mailpro-search-controls">
+                <div class="mailpro-search-bar">
+                    <input type="text" id="emailSearch" class="mailpro-form-control" placeholder="Search emails...">
+                    <button id="searchBtn" class="mailpro-btn mailpro-btn-primary mailpro-btn-small">Search</button>
+                </div>
+                <div class="mailpro-filter-controls">
+                    <select id="filterFrom" class="mailpro-form-control mailpro-filter-select">
+                        <option value="">From (all)</option>
+                    </select>
+                    <select id="filterDateRange" class="mailpro-form-control mailpro-filter-select">
+                        <option value="">Date (all)</option>
+                        <option value="today">Today</option>
+                        <option value="week">Past Week</option>
+                        <option value="month">Past Month</option>
+                        <option value="year">Past Year</option>
+                    </select>
+                    <select id="sortBy" class="mailpro-form-control mailpro-filter-select">
+                        <option value="date-desc">Latest First</option>
+                        <option value="date-asc">Oldest First</option>
+                        <option value="from">From (A-Z)</option>
+                        <option value="subject">Subject (A-Z)</option>
+                        <option value="unread">Unread First</option>
+                    </select>
+                </div>
+                <div class="mailpro-toolbar-controls">
+                    <button id="selectAllBtn" class="mailpro-btn mailpro-btn-secondary mailpro-btn-small">Select All</button>
+                    <button id="clearSelectionBtn" class="mailpro-btn mailpro-btn-secondary mailpro-btn-small">Clear</button>
+                    <select id="bulkActions" class="mailpro-form-control mailpro-filter-select" style="width: 150px;">
+                        <option value="">Bulk Actions</option>
+                        <option value="archive">Archive</option>
+                        <option value="delete">Delete</option>
+                        <option value="mark-read">Mark Read</option>
+                        <option value="mark-unread">Mark Unread</option>
+                        <option value="flag">Flag</option>
+                    </select>
+                    <button id="paginationPrev" class="mailpro-btn mailpro-btn-secondary mailpro-btn-small">Previous</button>
+                    <select id="pageSize" class="mailpro-form-control mailpro-filter-select">
+                        <option value="10">10 per page</option>
+                        <option value="25">25 per page</option>
+                        <option value="50">50 per page</option>
+                    </select>
+                    <button id="paginationNext" class="mailpro-btn mailpro-btn-secondary mailpro-btn-small">Next</button>
+                </div>
+                <div class="mailpro-pagination-info" id="paginationInfo">Loading...</div>
+            </div>
+
             <div id="emailList" class="mailpro-email-list" role="main">
                 <div class="mailpro-loading">Select an account to view emails</div>
+            </div>
+
+            <div class="mailpro-undo-redo" id="undoRedoBar" style="display: none;">
+                <button id="undoBtn" class="mailpro-btn mailpro-btn-secondary mailpro-btn-small">↶ Undo</button>
+                <button id="redoBtn" class="mailpro-btn mailpro-btn-secondary mailpro-btn-small">↷ Redo</button>
+                <span id="undoRedoText" class="mailpro-undo-redo-text"></span>
             </div>
         </div>
 
         <div id="emailDetail" class="mailpro-email-detail" style="display: none;" role="article">
-            <button id="backBtn" class="mailpro-btn mailpro-btn-secondary" aria-label="Back to inbox">Back to Inbox</button>
-
-            <div class="mailpro-email-view-controls" id="emailViewControls">
-                <button id="viewModeText" class="mailpro-view-btn mailpro-view-btn-active" data-view="text" title="Plain text view">📄 Text</button>
-                <button id="viewModeHtml" class="mailpro-view-btn" data-view="html" title="HTML rendered view">🌐 HTML</button>
-                <button id="viewModeRaw" class="mailpro-view-btn" data-view="raw" title="Raw source view">⚙️ Raw</button>
+            <div class="mailpro-email-detail-header">
+                <button id="backBtn" class="mailpro-btn mailpro-btn-secondary" aria-label="Back to inbox">← Back to Inbox</button>
+                <div class="mailpro-email-view-controls" id="emailViewControls">
+                    <button id="viewModeText" class="mailpro-view-btn mailpro-view-btn-active" data-view="text" title="Plain text view - best for reading">📄 Text</button>
+                    <button id="viewModeHtml" class="mailpro-view-btn" data-view="html" title="HTML rendered view - formatted layout">🌐 HTML</button>
+                    <button id="viewModeRaw" class="mailpro-view-btn" data-view="raw" title="Raw source view - full MIME headers">⚙️ Raw</button>
+                </div>
             </div>
 
-            <div id="emailContent" class="mailpro-email-content"></div>
-            <div id="emailRawContainer" class="mailpro-email-raw-container" style="display: none;">
-                <pre id="emailRaw" class="mailpro-email-raw-content"></pre>
+            <div class="mailpro-email-labels" id="emailLabels" style="display: none;">
+                <div class="mailpro-labels-title">Labels/Tags:</div>
+                <div class="mailpro-labels-list" id="labelsList"></div>
+                <input type="text" id="labelInput" class="mailpro-form-control" placeholder="Add label..." style="display: none;">
             </div>
+
+            <div class="mailpro-attachments" id="attachmentsContainer" style="display: none;">
+                <div class="mailpro-attachments-title">Attachments:</div>
+                <div id="attachmentsList" class="mailpro-attachments-list"></div>
+            </div>
+
+            <div id="emailMeta" class="mailpro-email-metadata"></div>
+            <div id="emailContentDisplay" class="mailpro-email-content-display"></div>
+
+            <div id="replyPanel" class="mailpro-reply-panel" style="display: none;">
+                <div class="mailpro-reply-header">
+                    <h4>Reply to Email</h4>
+                    <button id="closeReplyBtn" class="mailpro-btn-close" aria-label="Close reply panel">&times;</button>
+                </div>
+                <div id="quoteContent" class="mailpro-quote-content"></div>
+                <textarea id="replyBody" class="mailpro-form-control mailpro-compose-textarea" placeholder="Write your reply..."></textarea>
+                <div class="mailpro-compose-actions">
+                    <button id="sendReplyBtn" class="mailpro-btn mailpro-btn-primary">Send Reply</button>
+                    <button id="cancelReplyBtn" class="mailpro-btn mailpro-btn-secondary">Cancel</button>
+                </div>
+            </div>
+
+            <div id="emailTextContainer" class="mailpro-email-text-container" style="display: none;">
+                <div id="emailTextContent" class="mailpro-email-text-content"></div>
+            </div>
+
             <div id="emailHtmlContainer" class="mailpro-email-html-container" style="display: none;">
-                <iframe id="emailHtmlFrame" class="mailpro-email-html-frame" sandbox="allow-same-origin"></iframe>
+                <div class="mailpro-html-sandbox-warning">
+                    <strong>HTML Preview:</strong> External resources and scripts are blocked for your safety.
+                </div>
+                <iframe id="emailHtmlFrame" class="mailpro-email-html-frame" sandbox="allow-same-origin" title="HTML email content"></iframe>
+            </div>
+
+            <div id="emailRawContainer" class="mailpro-email-raw-container" style="display: none;">
+                <div class="mailpro-raw-info">Full raw MIME source:</div>
+                <pre id="emailRaw" class="mailpro-email-raw-content"></pre>
             </div>
         </div>
     </div>
@@ -175,6 +265,51 @@
 
         let currentAccount = '';
         let refreshInterval;
+        let allEmails = [];
+        let filteredEmails = [];
+        let selectedEmails = new Set();
+        let currentPage = 1;
+        let pageSize = 10;
+        let undoStack = [];
+        let redoStack = [];
+        let emailLabels = {};
+        let emailStates = {};
+
+        /**
+         * Advanced Email Management System - Action History for Undo/Redo
+         */
+        function recordAction(action, data) {
+            undoStack.push({ action, data, timestamp: Date.now() });
+            redoStack = [];
+            updateUndoRedoBar();
+        }
+
+        function undoAction() {
+            if (undoStack.length === 0) return;
+            const { action, data } = undoStack.pop();
+            redoStack.push({ action, data });
+            showStatus(`Action undone: ${action}`, 'info');
+            updateUndoRedoBar();
+        }
+
+        function redoAction() {
+            if (redoStack.length === 0) return;
+            const { action, data } = redoStack.pop();
+            undoStack.push({ action, data });
+            showStatus(`Action redone: ${action}`, 'info');
+            updateUndoRedoBar();
+        }
+
+        function updateUndoRedoBar() {
+            const undoRedoBar = document.getElementById('undoRedoBar');
+            if (undoStack.length > 0 || redoStack.length > 0) {
+                undoRedoBar.style.display = 'flex';
+                document.getElementById('undoBtn').disabled = undoStack.length === 0;
+                document.getElementById('redoBtn').disabled = redoStack.length === 0;
+            } else {
+                undoRedoBar.style.display = 'none';
+            }
+        }
 
         /**
          * Load available accounts for the dropdown
@@ -227,7 +362,6 @@
                 if (!response.ok) {
                     const error = await response.json();
 
-                    // Handle premium account specifically
                     if (error.isPremium) {
                         emailList.innerHTML = `
                             <div class="mailpro-premium-account-block">
@@ -251,15 +385,19 @@
                 const data = await response.json();
 
                 if (data.emails && data.emails.length > 0) {
-                    emailList.innerHTML = data.emails.map(email => `
-                        <div class="mailpro-email-item" onclick="viewEmail('${email.id}')" role="button" tabindex="0" aria-label="View email from ${escapeHtml(email.from)}">
-                            <div class="mailpro-email-from">${escapeHtml(email.from)}</div>
-                            <div class="mailpro-email-subject">${escapeHtml(email.subject || 'No Subject')}</div>
-                            <div class="mailpro-email-snippet">${escapeHtml(email.snippet || '')}</div>
-                            <div class="mailpro-email-date">${formatDate(email.date)}</div>
-                        </div>
-                    `).join('');
-
+                    allEmails = data.emails.map((email, idx) => ({
+                        ...email,
+                        id: email.id || idx,
+                        isRead: emailStates[email.id]?.isRead ?? false,
+                        isArchived: emailStates[email.id]?.isArchived ?? false,
+                        isStarred: emailStates[email.id]?.isStarred ?? false,
+                        isFlagged: emailStates[email.id]?.isFlagged ?? false,
+                        labels: emailLabels[email.id] || []
+                    }));
+                    filteredEmails = [...allEmails];
+                    currentPage = 1;
+                    displayEmails();
+                    updateUnreadCount();
                     showStatus(`Loaded ${data.emails.length} emails in MailPro Nafij for ${data.account}`, 'success');
                 } else {
                     emailList.innerHTML = '<div class="mailpro-no-emails">No emails found in this MailPro Nafij inbox</div>';
@@ -274,7 +412,165 @@
         }
 
         /**
-         * View full email content with multi-view support
+         * Display emails with pagination and selection
+         */
+        function displayEmails() {
+            const emailList = document.getElementById('emailList');
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const paginatedEmails = filteredEmails.slice(start, end);
+
+            if (paginatedEmails.length === 0) {
+                emailList.innerHTML = '<div class="mailpro-no-emails">No emails match your criteria</div>';
+                updatePaginationInfo();
+                return;
+            }
+
+            emailList.innerHTML = paginatedEmails.map((email, idx) => `
+                <div class="mailpro-email-item ${selectedEmails.has(email.id) ? 'selected' : ''} ${email.isRead ? 'read' : 'unread'}" data-email-id="${email.id}">
+                    <input type="checkbox" class="mailpro-email-checkbox" ${selectedEmails.has(email.id) ? 'checked' : ''} data-email-id="${email.id}">
+                    ${email.isStarred ? '<span class="mailpro-star-indicator">⭐</span>' : ''}
+                    ${email.isFlagged ? '<span class="mailpro-flag-indicator">🚩</span>' : ''}
+                    <div class="mailpro-email-content" onclick="viewEmail('${email.id}')">
+                        <div class="mailpro-email-from">${escapeHtml(email.from)}</div>
+                        <div class="mailpro-email-subject">${escapeHtml(email.subject || 'No Subject')}</div>
+                        <div class="mailpro-email-snippet">${escapeHtml(email.snippet || '')}</div>
+                        ${email.labels && email.labels.length > 0 ? `<div class="mailpro-email-labels-inline">${email.labels.map(l => `<span class="mailpro-label-tag">${escapeHtml(l)}</span>`).join('')}</div>` : ''}
+                    </div>
+                    <div class="mailpro-email-date">${formatDate(email.date)}</div>
+                </div>
+            `).join('');
+
+            // Attach event listeners
+            document.querySelectorAll('.mailpro-email-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const emailId = e.target.dataset.emailId;
+                    if (e.target.checked) {
+                        selectedEmails.add(emailId);
+                    } else {
+                        selectedEmails.delete(emailId);
+                    }
+                    displayEmails();
+                });
+            });
+
+            updatePaginationInfo();
+        }
+
+        /**
+         * Update pagination info
+         */
+        function updatePaginationInfo() {
+            const start = (currentPage - 1) * pageSize + 1;
+            const end = Math.min(currentPage * pageSize, filteredEmails.length);
+            const total = filteredEmails.length;
+            document.getElementById('paginationInfo').textContent = `Showing ${start}-${end} of ${total} emails`;
+        }
+
+        /**
+         * Filter and search emails
+         */
+        function filterEmails() {
+            const searchTerm = document.getElementById('emailSearch').value.toLowerCase();
+            const filterFrom = document.getElementById('filterFrom').value;
+            const filterDate = document.getElementById('filterDateRange').value;
+            const sortOrder = document.getElementById('sortBy').value;
+
+            filteredEmails = allEmails.filter(email => {
+                const matchesSearch = !searchTerm ||
+                    email.subject.toLowerCase().includes(searchTerm) ||
+                    email.from.toLowerCase().includes(searchTerm);
+
+                const matchesFrom = !filterFrom || email.from.toLowerCase() === filterFrom.toLowerCase();
+
+                const matchesDate = !filterDate || checkDateRange(email.date, filterDate);
+
+                return matchesSearch && matchesFrom && matchesDate;
+            });
+
+            // Sort
+            if (sortOrder === 'date-desc') {
+                filteredEmails.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (sortOrder === 'date-asc') {
+                filteredEmails.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sortOrder === 'from') {
+                filteredEmails.sort((a, b) => a.from.localeCompare(b.from));
+            } else if (sortOrder === 'subject') {
+                filteredEmails.sort((a, b) => a.subject.localeCompare(b.subject));
+            } else if (sortOrder === 'unread') {
+                filteredEmails.sort((a, b) => (b.isRead ? 1 : 0) - (a.isRead ? 1 : 0));
+            }
+
+            currentPage = 1;
+            displayEmails();
+        }
+
+        /**
+         * Check if email date matches filter
+         */
+        function checkDateRange(emailDate, range) {
+            const now = new Date();
+            const email = new Date(emailDate);
+            const diffMs = now - email;
+            const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+            if (range === 'today') return diffDays < 1;
+            if (range === 'week') return diffDays < 7;
+            if (range === 'month') return diffDays < 30;
+            if (range === 'year') return diffDays < 365;
+            return true;
+        }
+
+        /**
+         * Update unread count badge
+         */
+        function updateUnreadCount() {
+            const unreadCount = allEmails.filter(e => !e.isRead).length;
+            const badge = document.getElementById('unreadCountBadge');
+            if (badge) {
+                badge.textContent = unreadCount;
+                badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        /**
+         * Perform bulk actions
+         */
+        function performBulkAction() {
+            const action = document.getElementById('bulkActions').value;
+            if (!action || selectedEmails.size === 0) return;
+
+            selectedEmails.forEach(emailId => {
+                const email = allEmails.find(e => e.id === emailId);
+                if (email) {
+                    if (action === 'archive') {
+                        email.isArchived = true;
+                        recordAction('archived', { emailId });
+                    } else if (action === 'delete') {
+                        email.isArchived = true;
+                        recordAction('deleted', { emailId });
+                    } else if (action === 'mark-read') {
+                        email.isRead = true;
+                        recordAction('marked_read', { emailId });
+                    } else if (action === 'mark-unread') {
+                        email.isRead = false;
+                        recordAction('marked_unread', { emailId });
+                    } else if (action === 'flag') {
+                        email.isFlagged = true;
+                        recordAction('flagged', { emailId });
+                    }
+                }
+            });
+
+            showStatus(`Bulk action completed on ${selectedEmails.size} email(s)`, 'success');
+            selectedEmails.clear();
+            displayEmails();
+            updateUnreadCount();
+            document.getElementById('bulkActions').value = '';
+        }
+
+        /**
+         * View full email content with multi-view support and auto-detection
          */
         let currentEmailData = null;
         let currentViewMode = 'text';
@@ -292,26 +588,14 @@
 
                 currentEmailData = await response.json();
 
-                // Auto-select view mode based on content type
-                let initialViewMode = 'text';
-                if (currentEmailData.contentType === 'html') {
-                    initialViewMode = 'html';
-                } else if (currentEmailData.contentType === 'multipart' && currentEmailData.views.html) {
-                    initialViewMode = 'text';
-                }
-
                 // Render email metadata
-                document.getElementById('emailContent').innerHTML = `
-                    <h2 class="mailpro-email-subject-detail">${escapeHtml(currentEmailData.subject || 'No Subject')}</h2>
-                    <div class="mailpro-email-meta">
-                        <p><strong>From:</strong> ${escapeHtml(currentEmailData.from)}</p>
-                        <p><strong>To:</strong> ${escapeHtml(currentEmailData.to)}</p>
-                        <p><strong>Date:</strong> ${formatDate(currentEmailData.date)}</p>
-                    </div>
-                `;
+                renderEmailMetadata();
 
-                // Initialize view controls
-                setupViewModeButtons(initialViewMode);
+                // Auto-detect and select best initial view mode
+                let initialViewMode = detectBestViewMode();
+
+                // Initialize view controls and setup event listeners
+                setupViewModeButtons();
 
                 // Switch to initial view
                 switchViewMode(initialViewMode);
@@ -326,84 +610,245 @@
         }
 
         /**
-         * Setup view mode button event listeners
+         * Render email metadata header
          */
-        function setupViewModeButtons(initialMode) {
+        function renderEmailMetadata() {
+            const metaHtml = `
+                <h2 class="mailpro-email-subject-detail">${escapeHtml(currentEmailData.subject || '(No Subject)')}</h2>
+                <div class="mailpro-email-meta-info">
+                    <div class="mailpro-email-meta-row">
+                        <span class="mailpro-meta-label">From:</span>
+                        <span class="mailpro-meta-value">${escapeHtml(currentEmailData.from || 'Unknown')}</span>
+                    </div>
+                    <div class="mailpro-email-meta-row">
+                        <span class="mailpro-meta-label">To:</span>
+                        <span class="mailpro-meta-value">${escapeHtml(currentEmailData.to || 'Unknown')}</span>
+                    </div>
+                    <div class="mailpro-email-meta-row">
+                        <span class="mailpro-meta-label">Date:</span>
+                        <span class="mailpro-meta-value">${formatDate(currentEmailData.date)}</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('emailMeta').innerHTML = metaHtml;
+        }
+
+        /**
+         * Auto-detect best initial view mode based on content availability and type
+         */
+        function detectBestViewMode() {
+            // Priority: HTML if available and it's the only content, otherwise Text, then Raw
+            if (currentEmailData.contentType === 'html' && currentEmailData.views.html && !currentEmailData.views.text) {
+                return 'html';
+            }
+            if (currentEmailData.views.text) {
+                return 'text';
+            }
+            if (currentEmailData.views.html) {
+                return 'html';
+            }
+            if (currentEmailData.views.raw) {
+                return 'raw';
+            }
+            return 'text'; // fallback
+        }
+
+        /**
+         * Setup view mode button event listeners and visibility
+         */
+        function setupViewModeButtons() {
             const buttons = document.querySelectorAll('.mailpro-view-btn');
             buttons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    switchViewMode(this.getAttribute('data-view'));
-                });
+                btn.removeEventListener('click', modeClickHandler);
+                btn.addEventListener('click', modeClickHandler);
             });
 
-            // Show only available buttons
-            document.getElementById('viewModeText').style.display = currentEmailData.views.text ? 'inline-block' : 'none';
+            // Show/hide buttons based on available content
+            document.getElementById('viewModeText').style.display = (currentEmailData.views.text || currentEmailData.body) ? 'inline-block' : 'none';
             document.getElementById('viewModeHtml').style.display = currentEmailData.views.html ? 'inline-block' : 'none';
             document.getElementById('viewModeRaw').style.display = currentEmailData.views.raw ? 'inline-block' : 'none';
         }
 
         /**
-         * Switch between view modes
+         * Mode button click handler
+         */
+        function modeClickHandler() {
+            switchViewMode(this.getAttribute('data-view'));
+        }
+
+        /**
+         * Switch between view modes with proper rendering for each
          */
         function switchViewMode(mode) {
             currentViewMode = mode;
 
-            // Update button states
+            // Update button active states
             document.querySelectorAll('.mailpro-view-btn').forEach(btn => {
-                if (btn.getAttribute('data-view') === mode) {
-                    btn.classList.add('mailpro-view-btn-active');
-                } else {
-                    btn.classList.remove('mailpro-view-btn-active');
-                }
+                btn.classList.toggle('mailpro-view-btn-active', btn.getAttribute('data-view') === mode);
             });
 
-            // Hide all containers
-            document.getElementById('emailContent').style.display = 'none';
-            document.getElementById('emailRawContainer').style.display = 'none';
+            // Hide all content containers
+            document.getElementById('emailContentDisplay').style.display = 'none';
+            document.getElementById('emailTextContainer').style.display = 'none';
             document.getElementById('emailHtmlContainer').style.display = 'none';
+            document.getElementById('emailRawContainer').style.display = 'none';
 
             if (mode === 'text') {
-                // Show text/plain view
-                const textContent = currentEmailData.views.text || currentEmailData.body || 'No text content available';
-                document.getElementById('emailContent').innerHTML = `
-                    <h2 class="mailpro-email-subject-detail">${escapeHtml(currentEmailData.subject || 'No Subject')}</h2>
-                    <div class="mailpro-email-meta">
-                        <p><strong>From:</strong> ${escapeHtml(currentEmailData.from)}</p>
-                        <p><strong>To:</strong> ${escapeHtml(currentEmailData.to)}</p>
-                        <p><strong>Date:</strong> ${formatDate(currentEmailData.date)}</p>
-                    </div>
-                    <div class="mailpro-email-body">
-                        <pre>${escapeHtml(textContent)}</pre>
-                    </div>
-                `;
-                document.getElementById('emailContent').style.display = 'block';
-
+                renderTextView();
             } else if (mode === 'html' && currentEmailData.views.html) {
-                // Show HTML rendered view in iframe
-                const iframe = document.getElementById('emailHtmlFrame');
-                const htmlContent = `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="UTF-8">
-                        <style>
-                            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; color: #333; }
-                            img { max-width: 100%; height: auto; }
-                            a { color: #0066cc; }
-                        </style>
-                    </head>
-                    <body>${currentEmailData.views.html}</body>
-                    </html>
-                `;
-                iframe.srcdoc = htmlContent;
-                document.getElementById('emailHtmlContainer').style.display = 'block';
-
+                renderHtmlView();
             } else if (mode === 'raw' && currentEmailData.views.raw) {
-                // Show raw source view
-                const rawContent = currentEmailData.views.raw;
-                document.getElementById('emailRaw').textContent = rawContent;
-                document.getElementById('emailRawContainer').style.display = 'block';
+                renderRawView();
+            } else {
+                // Fallback to text if requested mode unavailable
+                renderTextView();
             }
+        }
+
+        /**
+         * Render plain text view with proper formatting
+         */
+        function renderTextView() {
+            const textContent = currentEmailData.views.text || currentEmailData.body || 'No text content available';
+            const textContainer = document.getElementById('emailTextContent');
+
+            // Preserve whitespace and line breaks for plain text
+            textContainer.textContent = textContent;
+            textContainer.style.whiteSpace = 'pre-wrap';
+            textContainer.style.wordWrap = 'break-word';
+
+            document.getElementById('emailTextContainer').style.display = 'block';
+        }
+
+        /**
+         * Render HTML view in sandboxed iframe with enhanced styling
+         */
+        function renderHtmlView() {
+            const iframe = document.getElementById('emailHtmlFrame');
+            const sanitizedHtml = currentEmailData.views.html || '';
+
+            // Create enhanced HTML wrapper with responsive styling
+            const wrappedHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        * {
+                            box-sizing: border-box;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        html {
+                            width: 100%;
+                            height: 100%;
+                        }
+                        body {
+                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                            font-size: 14px;
+                            line-height: 1.6;
+                            color: #333;
+                            background: #fafafa;
+                            padding: 20px;
+                            margin: 0;
+                        }
+                        @media (prefers-color-scheme: dark) {
+                            body {
+                                background: #1a1a1a;
+                                color: #e0e0e0;
+                            }
+                        }
+                        img {
+                            max-width: 100%;
+                            height: auto;
+                            display: block;
+                            margin: 10px 0;
+                        }
+                        a {
+                            color: #0066cc;
+                            text-decoration: none;
+                        }
+                        a:hover {
+                            text-decoration: underline;
+                        }
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                            margin: 10px 0;
+                        }
+                        td, th {
+                            border: 1px solid #ddd;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        th {
+                            background: #f5f5f5;
+                            font-weight: bold;
+                        }
+                        @media (prefers-color-scheme: dark) {
+                            td, th {
+                                border-color: #444;
+                            }
+                            th {
+                                background: #2a2a2a;
+                            }
+                        }
+                        pre, code {
+                            background: #f0f0f0;
+                            padding: 2px 4px;
+                            border-radius: 3px;
+                            font-family: 'Courier New', monospace;
+                            overflow-x: auto;
+                        }
+                        @media (prefers-color-scheme: dark) {
+                            pre, code {
+                                background: #2a2a2a;
+                                color: #e0e0e0;
+                            }
+                        }
+                        blockquote {
+                            border-left: 4px solid #ddd;
+                            padding-left: 16px;
+                            margin: 10px 0;
+                            color: #666;
+                        }
+                        @media (prefers-color-scheme: dark) {
+                            blockquote {
+                                border-left-color: #444;
+                                color: #999;
+                            }
+                        }
+                        hr {
+                            border: none;
+                            border-top: 1px solid #ddd;
+                            margin: 20px 0;
+                        }
+                        @media (prefers-color-scheme: dark) {
+                            hr {
+                                border-top-color: #444;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>${sanitizedHtml}</body>
+                </html>
+            `;
+
+            iframe.srcdoc = wrappedHtml;
+            document.getElementById('emailHtmlContainer').style.display = 'block';
+        }
+
+        /**
+         * Render raw MIME source view with syntax highlighting
+         */
+        function renderRawView() {
+            const rawContent = currentEmailData.views.raw || 'No raw content available';
+            const rawElement = document.getElementById('emailRaw');
+
+            // Display raw source with proper text handling
+            rawElement.textContent = rawContent;
+            document.getElementById('emailRawContainer').style.display = 'block';
         }
 
         /**

@@ -147,7 +147,7 @@
                         <div class="mailpro-form-group">
                             <label for="sendIsHtml" class="mailpro-checkbox-label">
                                 <input type="checkbox" id="sendIsHtml" aria-label="Send as HTML email">
-                                Send as HTML
+                                <span>Send as HTML</span>
                             </label>
                         </div>
                     </div>
@@ -374,15 +374,95 @@
                 </div>
             </div>
 
-            <!-- Accounts Management -->
+            <!-- Accounts Management with Advanced Filtering -->
             <div class="mailpro-card">
-                <h2 class="mailpro-admin-section-title">Account Management</h2>
+                <h2 class="mailpro-admin-section-title">Account Management & Monitoring</h2>
+
+                <!-- Enhanced Filtering/Search UX -->
+                <div class="mailpro-admin-filters">
+                    <div class="mailpro-filters-header">
+                        <h3 class="mailpro-filters-title">Filter & Search Accounts</h3>
+                        <button class="mailpro-btn mailpro-btn-xs mailpro-btn-secondary" onclick="toggleFiltersPanel()" id="toggleFiltersBtn">Show Filters</button>
+                    </div>
+
+                    <div id="filtersPanel" class="mailpro-filters-panel" style="display: none;">
+                        <div class="mailpro-form-section">
+                            <div class="mailpro-form-row">
+                                <div class="mailpro-form-group">
+                                    <label for="filterEmail" class="mailpro-label">Search Email:</label>
+                                    <input type="text" id="filterEmail" class="mailpro-form-control" placeholder="e.g. john@gmail.com" aria-label="Search accounts by email">
+                                </div>
+                            </div>
+
+                            <div class="mailpro-form-row">
+                                <div class="mailpro-form-group">
+                                    <label for="filterLockStatus" class="mailpro-label">Lock Status:</label>
+                                    <select id="filterLockStatus" class="mailpro-form-control" aria-label="Filter by lock status">
+                                        <option value="">-- All --</option>
+                                        <option value="locked">Locked Only</option>
+                                        <option value="unlocked">Unlocked Only</option>
+                                    </select>
+                                </div>
+                                <div class="mailpro-form-group">
+                                    <label for="filterAccountStatus" class="mailpro-label">Account Status:</label>
+                                    <select id="filterAccountStatus" class="mailpro-form-control" aria-label="Filter by account status">
+                                        <option value="">-- All --</option>
+                                        <option value="premium">Premium</option>
+                                        <option value="public">Public</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mailpro-form-row">
+                                <div class="mailpro-form-group">
+                                    <label for="filterExpiryStatus" class="mailpro-label">Lock Expiry:</label>
+                                    <select id="filterExpiryStatus" class="mailpro-form-control" aria-label="Filter by lock expiry status">
+                                        <option value="">-- All --</option>
+                                        <option value="expired">Expired</option>
+                                        <option value="expiring-soon">Expiring Soon (24h)</option>
+                                        <option value="active">Active Expiry</option>
+                                        <option value="no-expiry">No Expiry</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mailpro-form-row">
+                                <button class="mailpro-btn mailpro-btn-primary mailpro-btn-full" onclick="applyFilters()" aria-label="Apply account filters">Apply Filters</button>
+                                <button class="mailpro-btn mailpro-btn-secondary mailpro-btn-full" onclick="clearFilters()" aria-label="Clear all filters">Clear Filters</button>
+                            </div>
+
+                            <div id="filterResults" class="mailpro-filter-results" style="display: none;">
+                                <p id="filterResultsText"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Monitoring Stats -->
+                <div class="mailpro-monitoring-stats">
+                    <div class="mailpro-monitor-stat">
+                        <span class="mailpro-monitor-label">Locked Accounts:</span>
+                        <span class="mailpro-monitor-value" id="lockedAccountsCount">0</span>
+                    </div>
+                    <div class="mailpro-monitor-stat">
+                        <span class="mailpro-monitor-label">Expiring Soon:</span>
+                        <span class="mailpro-monitor-value" id="expiringAccountsCount">0</span>
+                    </div>
+                    <div class="mailpro-monitor-stat">
+                        <span class="mailpro-monitor-label">Total Activity Events:</span>
+                        <span class="mailpro-monitor-value" id="totalActivityCount">0</span>
+                    </div>
+                </div>
+
+                <!-- Accounts Table -->
                 <div class="mailpro-table-container">
                     <table id="accountsTable" role="grid" aria-label="MailPro Nafij connected accounts table">
                         <thead>
                             <tr>
                                 <th role="columnheader">Email Address</th>
                                 <th role="columnheader">Account Status</th>
+                                <th role="columnheader">Lock Status</th>
+                                <th role="columnheader">Lock Reason</th>
                                 <th role="columnheader">Created Date</th>
                                 <th role="columnheader">Last Accessed</th>
                                 <th role="columnheader">Actions</th>
@@ -390,7 +470,7 @@
                         </thead>
                         <tbody id="accountsTableBody">
                             <tr>
-                                <td colspan="5" class="mailpro-loading">Please login to view MailPro Nafij accounts</td>
+                                <td colspan="7" class="mailpro-loading">Please login to view MailPro Nafij accounts</td>
                             </tr>
                         </tbody>
                     </table>
@@ -446,6 +526,13 @@
         let isLoggedIn = false;
         let currentSelectedAccount = null;
         let allAccounts = [];
+        let filteredAccounts = [];
+        let currentFilters = {
+            email: '',
+            lockStatus: '',
+            accountStatus: '',
+            expiryStatus: ''
+        };
 
         /**
          * Admin login function
@@ -549,35 +636,16 @@
                 allAccounts = data.accounts || [];
 
                 updateStats(allAccounts);
+                updateMonitoringStats();
                 populateSenderDropdown(allAccounts);
+                filteredAccounts = [...allAccounts];
 
                 if (allAccounts.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748b; padding: 2rem;">No accounts connected to MailPro Nafij</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 2rem;">No accounts connected to MailPro Nafij</td></tr>';
                     return;
                 }
 
-                tbody.innerHTML = allAccounts.map(account => `
-                    <tr onclick="selectAccountForDetails('${account.email}')" style="cursor: pointer;">
-                        <td class="mailpro-email">${account.email}</td>
-                        <td>
-                            <span class="mailpro-status mailpro-status-${account.isPremium ? 'premium' : 'public'}">
-                                ${account.isPremium ? 'Premium' : 'Public'}
-                            </span>
-                        </td>
-                        <td class="mailpro-date">${formatDate(account.createdAt)}</td>
-                        <td class="mailpro-date">${formatDate(account.lastAccessed)}</td>
-                        <td>
-                            <div class="mailpro-actions">
-                                ${account.isPremium
-                                    ? `<button class="mailpro-btn mailpro-btn-success" onclick="unlockAccount('${account.email}'); event.stopPropagation();">Unlock</button>`
-                                    : `<button class="mailpro-btn mailpro-btn-danger" onclick="lockAccount('${account.email}'); event.stopPropagation();">Lock</button>`
-                                }
-                                <a href="/inbox.html?email=${encodeURIComponent(account.email)}" class="mailpro-btn mailpro-btn-primary" style="font-size: 0.875rem; padding: 0.5rem 1rem;" onclick="event.stopPropagation();">View Inbox</a>
-                                <button class="mailpro-btn mailpro-btn-secondary" onclick="viewLockHistory('${account.email}'); event.stopPropagation();" title="View lock/unlock history">History</button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
+                renderFilteredAccounts();
 
             } catch (error) {
                 console.error('Error loading accounts:', error);
@@ -1099,6 +1167,204 @@
          */
         function formatActionName(action) {
             return action.replace(/_/g, ' ').toUpperCase();
+        }
+
+        /**
+         * Get expiry status class for styling
+         */
+        function getExpiryStatusClass(expiry) {
+            if (!expiry) return 'none';
+            const now = new Date();
+            const expiryDate = new Date(expiry);
+            const hoursUntilExpiry = (expiryDate - now) / (1000 * 60 * 60);
+
+            if (hoursUntilExpiry < 0) return 'expired';
+            if (hoursUntilExpiry < 24) return 'expiring';
+            return 'active';
+        }
+
+        /**
+         * Get expiry status text for display
+         */
+        function getExpiryStatusText(expiry, isLocked) {
+            if (!isLocked || !expiry) return '-';
+            const now = new Date();
+            const expiryDate = new Date(expiry);
+
+            if (expiryDate < now) return 'Expired';
+
+            const hoursUntilExpiry = (expiryDate - now) / (1000 * 60 * 60);
+            if (hoursUntilExpiry < 24) {
+                return `Expires in ${Math.round(hoursUntilExpiry)}h`;
+            }
+
+            const daysUntilExpiry = Math.round(hoursUntilExpiry / 24);
+            return `Expires in ${daysUntilExpiry}d`;
+        }
+
+        /**
+         * Toggle filters panel visibility
+         */
+        function toggleFiltersPanel() {
+            const panel = document.getElementById('filtersPanel');
+            const btn = document.getElementById('toggleFiltersBtn');
+            const isHidden = panel.style.display === 'none';
+
+            panel.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Hide Filters' : 'Show Filters';
+        }
+
+        /**
+         * Apply filters to accounts list
+         */
+        function applyFilters() {
+            const email = document.getElementById('filterEmail').value.toLowerCase();
+            const lockStatus = document.getElementById('filterLockStatus').value;
+            const accountStatus = document.getElementById('filterAccountStatus').value;
+            const expiryStatus = document.getElementById('filterExpiryStatus').value;
+
+            currentFilters = { email, lockStatus, accountStatus, expiryStatus };
+
+            filteredAccounts = allAccounts.filter(account => {
+                // Email filter
+                if (email && !account.email.includes(email)) {
+                    return false;
+                }
+
+                // Lock status filter
+                if (lockStatus === 'locked' && !account.lock?.isLocked) {
+                    return false;
+                }
+                if (lockStatus === 'unlocked' && account.lock?.isLocked) {
+                    return false;
+                }
+
+                // Account status filter
+                if (accountStatus === 'premium' && !account.isPremium) {
+                    return false;
+                }
+                if (accountStatus === 'public' && account.isPremium) {
+                    return false;
+                }
+
+                // Expiry status filter
+                if (expiryStatus) {
+                    const expiryClass = getExpiryStatusClass(account.lock?.expiry);
+                    if (expiryStatus === 'expired' && expiryClass !== 'expired') return false;
+                    if (expiryStatus === 'expiring-soon' && expiryClass !== 'expiring') return false;
+                    if (expiryStatus === 'active' && expiryClass !== 'active') return false;
+                    if (expiryStatus === 'no-expiry' && account.lock?.isLocked && account.lock?.expiry) return false;
+                }
+
+                return true;
+            });
+
+            renderFilteredAccounts();
+            updateFilterResults();
+        }
+
+        /**
+         * Clear all filters
+         */
+        function clearFilters() {
+            document.getElementById('filterEmail').value = '';
+            document.getElementById('filterLockStatus').value = '';
+            document.getElementById('filterAccountStatus').value = '';
+            document.getElementById('filterExpiryStatus').value = '';
+            currentFilters = { email: '', lockStatus: '', accountStatus: '', expiryStatus: '' };
+            filteredAccounts = [...allAccounts];
+            renderFilteredAccounts();
+            document.getElementById('filterResults').style.display = 'none';
+        }
+
+        /**
+         * Render filtered accounts in table
+         */
+        function renderFilteredAccounts() {
+            const tbody = document.getElementById('accountsTableBody');
+            const accountsToRender = currentFilters.email || currentFilters.lockStatus || currentFilters.accountStatus || currentFilters.expiryStatus ?
+                filteredAccounts : allAccounts;
+
+            if (accountsToRender.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #64748b; padding: 2rem;">No accounts match the applied filters</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = accountsToRender.map(account => {
+                const lockStatus = account.lock?.isLocked ? 'Locked' : 'Unlocked';
+                const lockReason = account.lock?.reason || '-';
+                const expiryClass = getExpiryStatusClass(account.lock?.expiry);
+                const expiryText = getExpiryStatusText(account.lock?.expiry, account.lock?.isLocked);
+
+                return `
+                    <tr onclick="selectAccountForDetails('${account.email}')" style="cursor: pointer;" class="mailpro-account-row ${account.lock?.isLocked ? 'mailpro-row-locked' : ''}">
+                        <td class="mailpro-email">${account.email}</td>
+                        <td>
+                            <span class="mailpro-status mailpro-status-${account.isPremium ? 'premium' : 'public'}">
+                                ${account.isPremium ? 'Premium' : 'Public'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="mailpro-status mailpro-status-${lockStatus === 'Locked' ? 'danger' : 'success'}">
+                                ${lockStatus}
+                            </span>
+                        </td>
+                        <td class="mailpro-lock-reason" title="${lockReason}">${lockReason}</td>
+                        <td class="mailpro-date">${formatDate(account.createdAt)}</td>
+                        <td class="mailpro-date">${formatDate(account.lastAccessed)}</td>
+                        <td>
+                            <div class="mailpro-actions">
+                                ${account.isPremium
+                                    ? `<button class="mailpro-btn mailpro-btn-success mailpro-btn-sm" onclick="unlockAccount('${account.email}'); event.stopPropagation();" title="Unlock this account">Unlock</button>`
+                                    : `<button class="mailpro-btn mailpro-btn-danger mailpro-btn-sm" onclick="lockAccount('${account.email}'); event.stopPropagation();" title="Lock this account">Lock</button>`
+                                }
+                                <a href="/inbox.html?email=${encodeURIComponent(account.email)}" class="mailpro-btn mailpro-btn-primary mailpro-btn-sm" onclick="event.stopPropagation();" title="View account inbox">Inbox</a>
+                                <button class="mailpro-btn mailpro-btn-secondary mailpro-btn-sm" onclick="viewLockHistory('${account.email}'); event.stopPropagation();" title="View lock/unlock history">History</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Update filter results display
+         */
+        function updateFilterResults() {
+            const resultsDiv = document.getElementById('filterResults');
+            const resultsText = document.getElementById('filterResultsText');
+
+            const filters = [];
+            if (currentFilters.email) filters.push(`Email: ${currentFilters.email}`);
+            if (currentFilters.lockStatus) filters.push(`Lock: ${currentFilters.lockStatus}`);
+            if (currentFilters.accountStatus) filters.push(`Status: ${currentFilters.accountStatus}`);
+            if (currentFilters.expiryStatus) filters.push(`Expiry: ${currentFilters.expiryStatus}`);
+
+            if (filters.length > 0) {
+                resultsText.textContent = `Showing ${filteredAccounts.length} of ${allAccounts.length} accounts • ${filters.join(' • ')}`;
+                resultsDiv.style.display = 'block';
+            } else {
+                resultsDiv.style.display = 'none';
+            }
+        }
+
+        /**
+         * Update monitoring statistics
+         */
+        function updateMonitoringStats() {
+            const lockedAccounts = allAccounts.filter(a => a.lock?.isLocked).length;
+            const expiringAccounts = allAccounts.filter(a => {
+                if (!a.lock?.isLocked || !a.lock?.expiry) return false;
+                const expiryClass = getExpiryStatusClass(a.lock.expiry);
+                return expiryClass === 'expired' || expiryClass === 'expiring';
+            }).length;
+
+            const totalActivity = allAccounts.reduce((sum, a) =>
+                sum + (a.sendingActivity?.length || 0) + (a.adminAuditLog?.length || 0), 0);
+
+            document.getElementById('lockedAccountsCount').textContent = lockedAccounts;
+            document.getElementById('expiringAccountsCount').textContent = expiringAccounts;
+            document.getElementById('totalActivityCount').textContent = totalActivity;
         }
 
         /**

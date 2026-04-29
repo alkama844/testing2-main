@@ -7,10 +7,25 @@ const path = require('path');
 const crypto = require('crypto');
 require('dotenv').config();
 
-const Account = require('./models/Account');
+// Logging system
+const logger = {
+  info: (msg, data = {}) => console.log(`[INFO] ${new Date().toISOString()} - ${msg}`, data),
+  warn: (msg, data = {}) => console.warn(`[WARN] ${new Date().toISOString()} - ${msg}`, data),
+  error: (msg, error = {}) => console.error(`[ERROR] ${new Date().toISOString()} - ${msg}`, error),
+  debug: (msg, data = {}) => process.env.DEBUG && console.log(`[DEBUG] ${new Date().toISOString()} - ${msg}`, data)
+};
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+// Request timeout middleware
+const REQUEST_TIMEOUT = 30000; // 30 seconds
+app.use((req, res, next) => {
+  req.setTimeout(REQUEST_TIMEOUT, () => {
+    logger.warn('Request timeout', { path: req.path, method: req.method });
+    if (!res.headersSent) {
+      res.status(408).json({ error: 'Request timeout - operation took too long' });
+    }
+  });
+  next();
+});
 
 // CSRF Token Store (in-memory; in production use Redis)
 const csrfTokens = new Map();
@@ -303,18 +318,40 @@ function getRawEmail(data) {
 
 /**
  * Helper: Sanitize HTML to prevent script execution
+ * Removes dangerous tags and event handlers to prevent XSS attacks
  */
 function sanitizeHtml(html) {
   if (!html) return '';
 
   return html
+    // Remove all script tags and content
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    // Remove event handlers: onXXX="..." or onXXX='...'
     .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+    // Remove event handlers: onXXX=value (no quotes)
     .replace(/on\w+\s*=\s*[^\s>]*/gi, '')
+    // Remove javascript: protocol
     .replace(/javascript:/gi, '')
+    // Remove data: protocol (can execute code)
+    .replace(/data:text\/html/gi, '')
+    // Remove vbscript: protocol
+    .replace(/vbscript:/gi, '')
+    // Remove iframe tags
     .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    // Remove embed tags
     .replace(/<embed\b[^<]*>/gi, '')
-    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '');
+    // Remove object tags
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+    // Remove form tags
+    .replace(/<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi, '')
+    // Remove input/button tags
+    .replace(/<(input|button|textarea|select|option|label)\b[^<]*>/gi, '')
+    // Remove meta/base/link tags
+    .replace(/<(meta|base|link|style)\b[^<]*>/gi, '')
+    // Remove svg tags (can contain scripts)
+    .replace(/<svg\b[^<]*(?:(?!<\/svg>)<[^<]*)*<\/svg>/gi, '')
+    // Remove style attributes with potential code (expression, behavior, etc)
+    .replace(/style\s*=\s*["']([^"']*(?:expression|behavior|binding)[^"']*)["']/gi, '');
 }
 
 /**
@@ -372,8 +409,13 @@ function extractHeaderMetadata(headers) {
  * GET /csrf-token - Generate CSRF token for forms
  */
 app.get('/csrf-token', (req, res) => {
-  const token = generateCSRFToken();
-  res.json({ csrfToken: token });
+  try {
+    const token = generateCSRFToken();
+    res.json({ csrfToken: token, timestamp: Date.now() });
+  } catch (error) {
+    console.error('Error generating CSRF token:', error);
+    res.status(500).json({ error: 'Failed to generate security token' });
+  }
 });
 
 /**
@@ -1164,6 +1206,28 @@ app.post('/send', async (req, res) => {
       account.sendingActivity = account.sendingActivity.slice(-50);
     }
 
+    // Record to admin audit log for observability
+    if (!account.adminAuditLog) {
+      account.adminAuditLog = [];
+    }
+
+    account.adminAuditLog.push({
+      timestamp: new Date(),
+      action: 'email_sent',
+      admin: userEmail || email,
+      details: `Email sent to ${totalRecipients} recipient(s)`,
+      previousValue: null,
+      newValue: {
+        to: recipientsTo,
+        cc: recipientsCc,
+        bcc: recipientsBcc,
+        subject: subject,
+        messageId: sendRes.data.id,
+        isHtml: isHtml || false
+      },
+      status: 'success'
+    });
+
     await account.save();
 
     console.log(`📧 Email sent from ${email} to ${recipientsTo.length} recipient(s) (Cc: ${recipientsCc.length}, Bcc: ${recipientsBcc.length}): "${subject}"`);
@@ -1173,7 +1237,13 @@ app.post('/send', async (req, res) => {
       message: 'Email sent successfully',
       messageId: sendRes.data.id,
       recipients: totalRecipients,
-      subject: subject
+      subject: subject,
+      timestamp: new Date(),
+      recipientSummary: {
+        to: recipientsTo.length,
+        cc: recipientsCc.length,
+        bcc: recipientsBcc.length
+      }
     });
 
   } catch (error) {
@@ -1181,19 +1251,47 @@ app.post('/send', async (req, res) => {
 
     // Try to record failed attempt
     try {
-      const { email } = req.body;
+      const { email, to, subject } = req.body;
+      const userEmail = req.session.userEmail;
       if (email) {
         const account = await Account.findOne({ email: email.toLowerCase() });
         if (account) {
-          const recipientName = req.body.to ? (Array.isArray(req.body.to) ? req.body.to[0] : req.body.to).split('@')[0] : 'unknown';
+          const recipientName = to ? (Array.isArray(to) ? to[0] : to).split('@')[0] : 'unknown';
+          const recipientEmail = Array.isArray(to) ? to.join(', ') : to || 'unknown';
+
+          // Record to sending activity
           account.sendingActivity.push({
             timestamp: new Date(),
-            recipientEmail: Array.isArray(req.body.to) ? req.body.to.join(', ') : req.body.to || 'unknown',
+            recipientEmail: recipientEmail,
             recipientName: recipientName,
-            subject: req.body.subject || 'unknown',
+            subject: subject || 'unknown',
             status: 'failed',
             errorMessage: error.message
           });
+
+          // Record to admin audit log
+          if (!account.adminAuditLog) {
+            account.adminAuditLog = [];
+          }
+
+          account.adminAuditLog.push({
+            timestamp: new Date(),
+            action: 'email_sent',
+            admin: userEmail || email,
+            details: `Failed to send email: ${error.message}`,
+            previousValue: null,
+            newValue: {
+              to: recipientEmail,
+              subject: subject || 'unknown',
+              errorMessage: error.message
+            },
+            status: 'failed'
+          });
+
+          if (account.sendingActivity.length > 50) {
+            account.sendingActivity = account.sendingActivity.slice(-50);
+          }
+
           await account.save();
         }
       }
@@ -1203,7 +1301,8 @@ app.post('/send', async (req, res) => {
 
     res.status(500).json({
       error: 'Failed to send email',
-      details: error.message
+      details: error.message,
+      timestamp: new Date()
     });
   }
 });
@@ -1584,6 +1683,321 @@ app.post('/admin/bulk-action', checkAdmin, async (req, res) => {
   } catch (error) {
     console.error('❌ Bulk action error:', error);
     res.status(500).json({ error: 'Failed to perform bulk action' });
+  }
+});
+
+/**
+ * GET /admin/accounts/advanced-search - Advanced search with filtering - Admin only
+ * Query params: email, locked, expiry_soon, activity_high
+ */
+app.get('/admin/accounts/advanced-search', checkAdmin, async (req, res) => {
+  try {
+    const { email, locked, expiry_soon, activity_high, sort_by = 'created' } = req.query;
+
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ error: 'Database temporarily unavailable' });
+    }
+
+    let query = {};
+
+    if (email) {
+      query.email = { $regex: email, $options: 'i' };
+    }
+
+    if (locked === 'true') {
+      query['lock.isLocked'] = true;
+    }
+
+    const accounts = await Account.find(query)
+      .select({
+        email: 1,
+        isPremium: 1,
+        lock: 1,
+        createdAt: 1,
+        lastAccessed: 1,
+        sendingActivity: 1,
+        adminAuditLog: 1
+      })
+      .sort({ createdAt: -1 });
+
+    // Filter by expiry
+    let filtered = accounts;
+    if (expiry_soon === 'true') {
+      const now = new Date();
+      const in24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+      filtered = filtered.filter(acc => {
+        if (acc.lock?.isLocked && acc.lock?.expiry) {
+          const expiry = new Date(acc.lock.expiry);
+          return expiry > now && expiry <= in24h;
+        }
+        return false;
+      });
+    }
+
+    // Filter by activity
+    if (activity_high === 'true') {
+      filtered = filtered.filter(acc => {
+        const activityCount = (acc.sendingActivity || []).length;
+        return activityCount >= 10;
+      });
+    }
+
+    res.json({
+      total: filtered.length,
+      accounts: filtered
+    });
+
+  } catch (error) {
+    console.error('❌ Advanced search error:', error);
+    res.status(500).json({ error: 'Failed to perform advanced search' });
+  }
+});
+
+/**
+ * GET /admin/monitoring/summary - Get comprehensive monitoring summary - Admin only
+ */
+app.get('/admin/monitoring/summary', checkAdmin, async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ error: 'Database temporarily unavailable' });
+    }
+
+    const accounts = await Account.find({});
+
+    // Calculate lock statistics
+    const lockedAccounts = accounts.filter(a => a.lock?.isLocked);
+    const now = new Date();
+    const in24h = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    const expiringAccounts = lockedAccounts.filter(a => {
+      if (a.lock?.expiry) {
+        const expiry = new Date(a.lock.expiry);
+        return expiry > now && expiry <= in24h;
+      }
+      return false;
+    });
+    const expiredAccounts = lockedAccounts.filter(a => {
+      if (a.lock?.expiry) {
+        const expiry = new Date(a.lock.expiry);
+        return expiry <= now;
+      }
+      return false;
+    });
+
+    // Calculate activity statistics
+    const totalActivity = accounts.reduce((sum, a) =>
+      sum + ((a.sendingActivity || []).length + (a.adminAuditLog || []).length), 0);
+
+    const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const recentActivity = accounts.reduce((sum, a) => {
+      const sends = (a.sendingActivity || []).filter(s => new Date(s.timestamp) > last24h).length;
+      const audits = (a.adminAuditLog || []).filter(l => new Date(l.timestamp) > last24h).length;
+      return sum + sends + audits;
+    }, 0);
+
+    // Most active accounts
+    const accountActivity = accounts.map(a => ({
+      email: a.email,
+      sends: (a.sendingActivity || []).length,
+      audits: (a.adminAuditLog || []).length,
+      total: (a.sendingActivity || []).length + (a.adminAuditLog || []).length
+    }))
+      .filter(a => a.total > 0)
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 5);
+
+    // Lock reasons breakdown
+    const lockReasons = {};
+    lockedAccounts.forEach(a => {
+      const reason = a.lock?.reason || 'No reason provided';
+      lockReasons[reason] = (lockReasons[reason] || 0) + 1;
+    });
+
+    res.json({
+      timestamp: new Date(),
+      summary: {
+        totalAccounts: accounts.length,
+        lockedAccounts: lockedAccounts.length,
+        expiringAccounts: expiringAccounts.length,
+        expiredAccounts: expiredAccounts.length,
+        accountsNeedingAttention: expiringAccounts.length + expiredAccounts.length
+      },
+      activity: {
+        totalEvents: totalActivity,
+        last24hEvents: recentActivity,
+        topAccounts: accountActivity
+      },
+      locks: {
+        byReason: lockReasons,
+        totalWithExpiry: lockedAccounts.filter(a => a.lock?.expiry).length
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ Monitoring summary error:', error);
+    res.status(500).json({ error: 'Failed to fetch monitoring summary' });
+  }
+});
+
+/**
+ * GET /admin/accounts/expiry-check - Check for expired locks - Admin only
+ */
+app.get('/admin/accounts/expiry-check', checkAdmin, async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ error: 'Database temporarily unavailable' });
+    }
+
+    const now = new Date();
+    const accounts = await Account.find({
+      'lock.isLocked': true,
+      'lock.expiry': { $lte: now }
+    });
+
+    const results = {
+      expiredCount: accounts.length,
+      autoUnlockPerformed: 0,
+      failedAutoUnlock: []
+    };
+
+    // Auto-unlock expired accounts
+    for (const account of accounts) {
+      try {
+        account.lock.unlockHistory.push({
+          unlockedAt: new Date(),
+          unlockedBy: 'system',
+          reason: 'Lock expired automatically'
+        });
+        account.isPremium = false;
+        account.lock.isLocked = false;
+
+        account.adminAuditLog.push({
+          timestamp: new Date(),
+          action: 'account_unlocked',
+          admin: 'system',
+          details: 'Automatic unlock due to lock expiry',
+          status: 'success'
+        });
+
+        await account.save();
+        results.autoUnlockPerformed++;
+        console.log(`🔓 Auto-unlocked expired account: ${account.email}`);
+      } catch (error) {
+        results.failedAutoUnlock.push({
+          email: account.email,
+          error: error.message
+        });
+      }
+    }
+
+    res.json(results);
+
+  } catch (error) {
+    console.error('❌ Expiry check error:', error);
+    res.status(500).json({ error: 'Failed to check lock expiry' });
+  }
+});
+
+/**
+ * GET /admin/activity-log - Get detailed activity log with filtering - Admin only
+ * Query params: type (send|lock|unlock|quota), email, limit (default 50)
+ */
+app.get('/admin/activity-log', checkAdmin, async (req, res) => {
+  try {
+    const { type, email, limit = 50 } = req.query;
+
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ error: 'Database temporarily unavailable' });
+    }
+
+    let query = {};
+    if (email) {
+      query.email = new RegExp(email, 'i');
+    }
+
+    const accounts = await Account.find(query).select({
+      email: 1,
+      sendingActivity: 1,
+      adminAuditLog: 1,
+      lock: 1
+    });
+
+    const activities = [];
+
+    accounts.forEach(account => {
+      // Add sending activities
+      if (!type || type === 'send') {
+        (account.sendingActivity || []).forEach(activity => {
+          activities.push({
+            type: 'send',
+            email: account.email,
+            timestamp: activity.timestamp,
+            recipient: activity.recipientEmail,
+            subject: activity.subject,
+            status: activity.status,
+            error: activity.errorMessage,
+            totalRecipients: activity.totalRecipients
+          });
+        });
+      }
+
+      // Add admin audit log
+      if (!type || type === 'admin') {
+        (account.adminAuditLog || []).forEach(audit => {
+          activities.push({
+            type: 'admin',
+            email: account.email,
+            timestamp: audit.timestamp,
+            action: audit.action,
+            admin: audit.admin,
+            details: audit.details,
+            status: audit.status
+          });
+        });
+      }
+
+      // Add lock history
+      if (!type || type === 'lock') {
+        if (account.lock?.isLocked) {
+          activities.push({
+            type: 'lock',
+            email: account.email,
+            timestamp: account.lock.timestamp,
+            action: 'locked',
+            reason: account.lock.reason,
+            actor: account.lock.actor,
+            expiry: account.lock.expiry
+          });
+        }
+
+        (account.lock?.unlockHistory || []).forEach(unlock => {
+          activities.push({
+            type: 'unlock',
+            email: account.email,
+            timestamp: unlock.unlockedAt,
+            action: 'unlocked',
+            reason: unlock.reason,
+            actor: unlock.unlockedBy
+          });
+        });
+      }
+    });
+
+    // Sort by timestamp descending
+    activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    // Apply limit
+    const limitedActivities = activities.slice(0, parseInt(limit));
+
+    res.json({
+      total: activities.length,
+      returned: limitedActivities.length,
+      activities: limitedActivities
+    });
+
+  } catch (error) {
+    console.error('❌ Activity log fetch error:', error);
+    res.status(500).json({ error: 'Failed to fetch activity log' });
   }
 });
 
