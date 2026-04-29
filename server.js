@@ -7,6 +7,10 @@ const path = require('path');
 const crypto = require('crypto');
 require('dotenv').config();
 
+const app = express();
+const PORT = process.env.PORT || 3000;
+const Account = require('./models/Account');
+
 // Logging system
 const logger = {
   info: (msg, data = {}) => console.log(`[INFO] ${new Date().toISOString()} - ${msg}`, data),
