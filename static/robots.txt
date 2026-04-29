@@ -1,0 +1,37 @@
+# MailPro Nafij robots.txt - SEO Crawl Directives
+# Primary domain: mailpro.nafij.me
+
+# Allow all crawlers for public pages
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /privacy
+Allow: /terms
+Allow: /author
+Allow: /credits
+
+# Disallow admin and internal paths
+Disallow: /admin
+Disallow: /auth/
+Disallow: /logout
+Disallow: /available-accounts
+Disallow: /inbox/
+Disallow: /email/
+Disallow: /accounts
+Disallow: /admin/
+
+# Allow specific crawlers for monitoring
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap location
+Sitemap: https://mailpro.nafij.me/sitemap.xml
+
+# Crawl delay for resource management
+Crawl-delay: 1
+
+# Cache directives
+# No cache restrictions for public content

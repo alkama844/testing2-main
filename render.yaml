@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: mailpro-nafij
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_KEYS
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: OAUTH_CALLBACK_URL
+        value: https://mailpro-nafij.onrender.com/auth/google/callback
+      - key: MONGODB_URI
+        sync: false
+      - key: CANONICAL_URL
+        value: https://mailpro.nafij.me
+      - key: SUPPORT_EMAIL
+        value: support@nafij.me
+      - key: HOSTING_CREDIT
+        value: hosting@nafijrahaman.me
+    healthCheckPath: /
+    dockerfile: Dockerfile
+    preDeployCommand: npm install && npm run build
+
+databases:
+  - name: mailpro-mongodb
+    plan: free
+    ipWhitelist:
+      - 0.0.0.0/0

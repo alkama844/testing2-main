@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MailPro Nafij Inbox - View & Manage Your Emails</title>
+    <meta name="description" content="MailPro Nafij Inbox: View and manage your Gmail emails securely. Access multiple mail nafij accounts, read email threads, and manage settings.">
+    <meta name="keywords" content="mail nafij inbox, mailpro nafij email viewer, gmail inbox, email management, nafijrahaman">
+    <meta name="canonical" content="https://mailpro.nafij.me/inbox.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mailpro.nafij.me/inbox.html">
+    <meta property="og:title" content="MailPro Nafij Inbox - View & Manage Your Emails">
+    <meta property="og:description" content="Access and manage multiple Gmail accounts through MailPro Nafij with secure OAuth2 authentication.">
+    <meta property="og:image" content="https://mailpro.nafij.me/mailpro-nafij.svg">
+    <meta property="og:image:alt" content="Mailpro Nafij Logo - Gmail Inbox Viewer">
+    <meta property="og:site_name" content="MailPro Nafij">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://mailpro.nafij.me/inbox.html">
+    <meta name="twitter:title" content="MailPro Nafij Inbox">
+    <meta name="twitter:description" content="View your Gmail emails securely with MailPro Nafij">
+    <meta name="twitter:image" content="https://mailpro.nafij.me/mailpro-nafij.svg">
+    <meta name="author" content="Nafij Rahaman">
+    <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "MailPro Nafij Inbox",
+      "url": "https://mailpro.nafij.me/inbox.html",
+      "description": "Secure Gmail inbox viewer for mail nafij and nafijrahaman accounts",
+      "image": "https://mailpro.nafij.me/mailpro-nafij.svg"
+    }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="mailpro-navbar" role="banner">
+        <a href="/" class="mailpro-logo-link" title="MailPro Nafij - Home">
+            <img src="/mailpro-nafij.svg" alt="Mailpro Nafij Logo" class="mailpro-logo-img" width="56" height="56">
+            <span class="mailpro-logo-text">MailPro Nafij</span>
+        </a>
+        <nav class="mailpro-nav" aria-label="Main navigation">
+            <a href="/" class="mailpro-nav-link" title="Home - MailPro Nafij">Home</a>
+            <a href="/inbox.html" class="mailpro-nav-link" title="Inbox - View emails">Inbox</a>
+            <a href="/admin" class="mailpro-nav-link" title="Admin Panel">Admin</a>
+            <a href="/author" class="mailpro-nav-link" title="About the Author">Author</a>
+            <a href="/about.html" class="mailpro-nav-link" title="About MailPro Nafij">About</a>
+            <a href="/credits.html" class="mailpro-nav-link" title="Credits and Contributors">Credits</a>
+        </nav>
+        <div class="mailpro-header-right">
+            <button id="themeToggle" class="mailpro-btn-theme-toggle" aria-label="MailPro Nafij toggle dark/light theme" title="Toggle theme">🌙</button>
+        </div>
+    </header>
+    <div class="container">
+        <div class="mailpro-header" id="mailpro-inbox-header">
+            <h1 class="mailpro-inbox-title" id="mailpro-inbox-page-title">MailPro Nafij Inbox</h1>
+            <p class="mailpro-inbox-subtitle">View your Gmail messages securely</p>
+            <div class="mailpro-header-actions" role="navigation" aria-label="Inbox navigation">
+                <a href="/" class="mailpro-btn mailpro-btn-secondary" title="Back to MailPro Nafij home">Home</a>
+                <a href="/auth/google" class="mailpro-btn mailpro-btn-primary" title="Add another Gmail account to MailPro">Add Account</a>
+                <a href="/logout" class="mailpro-btn mailpro-btn-secondary" title="Logout from MailPro Nafij">Logout</a>
+            </div>
+        </div>
+
+        <div class="mailpro-card">
+            <div class="mailpro-account-selector" id="mailpro-account-controls">
+                <label for="accountSelect" class="mailpro-label">Select MailPro Nafij Account:</label>
+                <select id="accountSelect" class="mailpro-form-control" aria-label="Select Gmail account to view in MailPro Nafij">
+                    <option value="">Loading mail nafij accounts...</option>
+                </select>
+                <button id="refreshBtn" class="mailpro-btn mailpro-btn-primary" aria-label="Refresh inbox emails">Refresh</button>
+                <button id="composeBtn" class="mailpro-btn mailpro-btn-success" aria-label="Compose new email" style="display: none;">Compose</button>
+            </div>
+
+            <div id="statusMessage" class="mailpro-status-message" role="status" aria-live="polite"></div>
+
+            <div id="composePanel" class="mailpro-compose-panel" style="display: none;">
+                <div class="mailpro-compose-header">
+                    <h3>Compose Email in MailPro Nafij</h3>
+                    <button id="closeComposeBtn" class="mailpro-btn-close" aria-label="Close compose panel">&times;</button>
+                </div>
+
+                <!-- HTML Mode Toggle -->
+                <div class="mailpro-compose-mode-controls">
+                    <label class="mailpro-mode-toggle">
+                        <input type="checkbox" id="htmlModeToggle" aria-label="Toggle HTML email mode">
+                        <span class="mailpro-toggle-label">HTML Email</span>
+                    </label>
+                </div>
+
+                <div class="mailpro-compose-form">
+                    <div class="mailpro-form-group">
+                        <label for="composeTo" class="mailpro-label">To:</label>
+                        <input type="text" id="composeTo" class="mailpro-form-control" placeholder="recipient@example.com or email1@example.com, email2@example.com" required aria-label="Email recipient(s)">
+                        <div id="toValidationMsg" class="mailpro-validation-msg"></div>
+                    </div>
+                    <div class="mailpro-form-group">
+                        <label for="composeCc" class="mailpro-label">Cc (optional):</label>
+                        <input type="text" id="composeCc" class="mailpro-form-control" placeholder="email1@example.com, email2@example.com" aria-label="CC recipients">
+                        <div id="ccValidationMsg" class="mailpro-validation-msg"></div>
+                    </div>
+                    <div class="mailpro-form-group">
+                        <label for="composeBcc" class="mailpro-label">Bcc (optional):</label>
+                        <input type="text" id="composeBcc" class="mailpro-form-control" placeholder="email1@example.com, email2@example.com" aria-label="BCC recipients">
+                        <div id="bccValidationMsg" class="mailpro-validation-msg"></div>
+                    </div>
+                    <div class="mailpro-form-group">
+                        <label for="composeSubject" class="mailpro-label">Subject:</label>
+                        <input type="text" id="composeSubject" class="mailpro-form-control" placeholder="Email subject" required aria-label="Email subject">
+                    </div>
+
+                    <!-- HTML/Text Body Section with Preview Toggle -->
+                    <div class="mailpro-body-section">
+                        <div class="mailpro-body-controls">
+                            <label for="composeBody" class="mailpro-label">Message:</label>
+                            <button type="button" id="togglePreviewBtn" class="mailpro-btn mailpro-btn-small mailpro-btn-secondary" style="display: none;" aria-label="Toggle HTML preview">Preview</button>
+                        </div>
+                        <textarea id="composeBody" class="mailpro-form-control mailpro-compose-textarea" placeholder="Write your message here..." required aria-label="Email message body"></textarea>
+                        <div id="htmlPreviewContainer" class="mailpro-html-preview-container" style="display: none;">
+                            <div class="mailpro-preview-header">
+                                <span class="mailpro-preview-title">Live Preview</span>
+                                <button type="button" id="closePreviewBtn" class="mailpro-btn-close-small" aria-label="Close preview">&times;</button>
+                            </div>
+                            <iframe id="htmlPreviewFrame" class="mailpro-html-preview-frame" sandbox="allow-same-origin" title="HTML email preview"></iframe>
+                        </div>
+                    </div>
+
+                    <div class="mailpro-compose-actions">
+                        <button id="sendBtn" class="mailpro-btn mailpro-btn-success" aria-label="Send email">Send Email</button>
+                        <button id="cancelBtn" class="mailpro-btn mailpro-btn-secondary" aria-label="Cancel compose">Cancel</button>
+                    </div>
+                    <div id="sendStatus" class="mailpro-status-message" role="status" aria-live="assertive"></div>
+                </div>
+            </div>
+
+            <div id="emailList" class="mailpro-email-list" role="main">
+                <div class="mailpro-loading">Select an account to view emails</div>
+            </div>
+        </div>
+
+        <div id="emailDetail" class="mailpro-email-detail" style="display: none;" role="article">
+            <button id="backBtn" class="mailpro-btn mailpro-btn-secondary" aria-label="Back to inbox">Back to Inbox</button>
+
+            <div class="mailpro-email-view-controls" id="emailViewControls">
+                <button id="viewModeText" class="mailpro-view-btn mailpro-view-btn-active" data-view="text" title="Plain text view">📄 Text</button>
+                <button id="viewModeHtml" class="mailpro-view-btn" data-view="html" title="HTML rendered view">🌐 HTML</button>
+                <button id="viewModeRaw" class="mailpro-view-btn" data-view="raw" title="Raw source view">⚙️ Raw</button>
+            </div>
+
+            <div id="emailContent" class="mailpro-email-content"></div>
+            <div id="emailRawContainer" class="mailpro-email-raw-container" style="display: none;">
+                <pre id="emailRaw" class="mailpro-email-raw-content"></pre>
+            </div>
+            <div id="emailHtmlContainer" class="mailpro-email-html-container" style="display: none;">
+                <iframe id="emailHtmlFrame" class="mailpro-email-html-frame" sandbox="allow-same-origin"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="global.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearElement = document.getElementById('mailpro-year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+    <script>
+
+        let currentAccount = '';
+        let refreshInterval;
+
+        /**
+         * Load available accounts for the dropdown
+         */
+        async function loadAccounts() {
+            try {
+                const response = await fetch('/available-accounts');
+                const data = await response.json();
+
+                const select = document.getElementById('accountSelect');
+                select.innerHTML = '<option value="">Select a mail nafij account...</option>';
+
+                if (data.accounts && data.accounts.length > 0) {
+                    data.accounts.forEach(account => {
+                        const option = document.createElement('option');
+                        option.value = account.email;
+                        const status = account.isPremium ? 'Premium' : 'Public';
+                        option.textContent = `${account.email} [${status}]`;
+                        select.appendChild(option);
+                    });
+                } else {
+                    select.innerHTML = '<option value="">No MailPro Nafij accounts available</option>';
+                }
+
+                // Auto-select first account if available
+                if (data.accounts && data.accounts.length > 0) {
+                    select.value = data.accounts[0].email;
+                    currentAccount = data.accounts[0].email;
+                    loadEmails();
+                }
+
+            } catch (error) {
+                console.error('Error loading accounts:', error);
+                showStatus('Failed to load MailPro Nafij accounts', 'error');
+            }
+        }
+
+        /**
+         * Load emails for the selected account
+         */
+        async function loadEmails() {
+            if (!currentAccount) return;
+
+            const emailList = document.getElementById('emailList');
+            emailList.innerHTML = '<div class="mailpro-loading">Loading emails from MailPro Nafij...</div>';
+
+            try {
+                const response = await fetch(`/inbox/${encodeURIComponent(currentAccount)}`);
+
+                if (!response.ok) {
+                    const error = await response.json();
+
+                    // Handle premium account specifically
+                    if (error.isPremium) {
+                        emailList.innerHTML = `
+                            <div class="mailpro-premium-account-block">
+                                <div class="mailpro-premium-icon">Premium Account</div>
+                                <h3>MailPro Nafij Premium Account</h3>
+                                <p>This Gmail account is marked as premium and is restricted in MailPro Nafij.</p>
+                                <p><strong>Only the account owner or admin can access these emails.</strong></p>
+                                <div class="mailpro-premium-actions">
+                                    <a href="/admin" class="mailpro-btn mailpro-btn-primary">Contact MailPro Admin</a>
+                                    <a href="/auth/google" class="mailpro-btn mailpro-btn-secondary">Connect Your Gmail</a>
+                                </div>
+                            </div>
+                        `;
+                        showStatus('This is a premium account restricted in MailPro Nafij', 'error');
+                        return;
+                    }
+
+                    throw new Error(error.error || 'Failed to load emails');
+                }
+
+                const data = await response.json();
+
+                if (data.emails && data.emails.length > 0) {
+                    emailList.innerHTML = data.emails.map(email => `
+                        <div class="mailpro-email-item" onclick="viewEmail('${email.id}')" role="button" tabindex="0" aria-label="View email from ${escapeHtml(email.from)}">
+                            <div class="mailpro-email-from">${escapeHtml(email.from)}</div>
+                            <div class="mailpro-email-subject">${escapeHtml(email.subject || 'No Subject')}</div>
+                            <div class="mailpro-email-snippet">${escapeHtml(email.snippet || '')}</div>
+                            <div class="mailpro-email-date">${formatDate(email.date)}</div>
+                        </div>
+                    `).join('');
+
+                    showStatus(`Loaded ${data.emails.length} emails in MailPro Nafij for ${data.account}`, 'success');
+                } else {
+                    emailList.innerHTML = '<div class="mailpro-no-emails">No emails found in this MailPro Nafij inbox</div>';
+                    showStatus('No emails found in MailPro Nafij account', 'info');
+                }
+
+            } catch (error) {
+                console.error('Error loading emails:', error);
+                emailList.innerHTML = `<div class="mailpro-error">Error: ${error.message}</div>`;
+                showStatus(error.message, 'error');
+            }
+        }
+
+        /**
+         * View full email content with multi-view support
+         */
+        let currentEmailData = null;
+        let currentViewMode = 'text';
+
+        async function viewEmail(messageId) {
+            if (!currentAccount || !messageId) return;
+
+            try {
+                const response = await fetch(`/email/${encodeURIComponent(currentAccount)}/${messageId}`);
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to load email');
+                }
+
+                currentEmailData = await response.json();
+
+                // Auto-select view mode based on content type
+                let initialViewMode = 'text';
+                if (currentEmailData.contentType === 'html') {
+                    initialViewMode = 'html';
+                } else if (currentEmailData.contentType === 'multipart' && currentEmailData.views.html) {
+                    initialViewMode = 'text';
+                }
+
+                // Render email metadata
+                document.getElementById('emailContent').innerHTML = `
+                    <h2 class="mailpro-email-subject-detail">${escapeHtml(currentEmailData.subject || 'No Subject')}</h2>
+                    <div class="mailpro-email-meta">
+                        <p><strong>From:</strong> ${escapeHtml(currentEmailData.from)}</p>
+                        <p><strong>To:</strong> ${escapeHtml(currentEmailData.to)}</p>
+                        <p><strong>Date:</strong> ${formatDate(currentEmailData.date)}</p>
+                    </div>
+                `;
+
+                // Initialize view controls
+                setupViewModeButtons(initialViewMode);
+
+                // Switch to initial view
+                switchViewMode(initialViewMode);
+
+                document.getElementById('emailDetail').style.display = 'block';
+                document.querySelector('.mailpro-card').style.display = 'none';
+
+            } catch (error) {
+                console.error('Error loading email:', error);
+                showStatus(error.message, 'error');
+            }
+        }
+
+        /**
+         * Setup view mode button event listeners
+         */
+        function setupViewModeButtons(initialMode) {
+            const buttons = document.querySelectorAll('.mailpro-view-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchViewMode(this.getAttribute('data-view'));
+                });
+            });
+
+            // Show only available buttons
+            document.getElementById('viewModeText').style.display = currentEmailData.views.text ? 'inline-block' : 'none';
+            document.getElementById('viewModeHtml').style.display = currentEmailData.views.html ? 'inline-block' : 'none';
+            document.getElementById('viewModeRaw').style.display = currentEmailData.views.raw ? 'inline-block' : 'none';
+        }
+
+        /**
+         * Switch between view modes
+         */
+        function switchViewMode(mode) {
+            currentViewMode = mode;
+
+            // Update button states
+            document.querySelectorAll('.mailpro-view-btn').forEach(btn => {
+                if (btn.getAttribute('data-view') === mode) {
+                    btn.classList.add('mailpro-view-btn-active');
+                } else {
+                    btn.classList.remove('mailpro-view-btn-active');
+                }
+            });
+
+            // Hide all containers
+            document.getElementById('emailContent').style.display = 'none';
+            document.getElementById('emailRawContainer').style.display = 'none';
+            document.getElementById('emailHtmlContainer').style.display = 'none';
+
+            if (mode === 'text') {
+                // Show text/plain view
+                const textContent = currentEmailData.views.text || currentEmailData.body || 'No text content available';
+                document.getElementById('emailContent').innerHTML = `
+                    <h2 class="mailpro-email-subject-detail">${escapeHtml(currentEmailData.subject || 'No Subject')}</h2>
+                    <div class="mailpro-email-meta">
+                        <p><strong>From:</strong> ${escapeHtml(currentEmailData.from)}</p>
+                        <p><strong>To:</strong> ${escapeHtml(currentEmailData.to)}</p>
+                        <p><strong>Date:</strong> ${formatDate(currentEmailData.date)}</p>
+                    </div>
+                    <div class="mailpro-email-body">
+                        <pre>${escapeHtml(textContent)}</pre>
+                    </div>
+                `;
+                document.getElementById('emailContent').style.display = 'block';
+
+            } else if (mode === 'html' && currentEmailData.views.html) {
+                // Show HTML rendered view in iframe
+                const iframe = document.getElementById('emailHtmlFrame');
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <style>
+                            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; color: #333; }
+                            img { max-width: 100%; height: auto; }
+                            a { color: #0066cc; }
+                        </style>
+                    </head>
+                    <body>${currentEmailData.views.html}</body>
+                    </html>
+                `;
+                iframe.srcdoc = htmlContent;
+                document.getElementById('emailHtmlContainer').style.display = 'block';
+
+            } else if (mode === 'raw' && currentEmailData.views.raw) {
+                // Show raw source view
+                const rawContent = currentEmailData.views.raw;
+                document.getElementById('emailRaw').textContent = rawContent;
+                document.getElementById('emailRawContainer').style.display = 'block';
+            }
+        }
+
+        /**
+         * Go back to inbox view
+         */
+        function goBack() {
+            document.getElementById('emailDetail').style.display = 'none';
+            document.querySelector('.mailpro-card').style.display = 'block';
+        }
+
+        /**
+         * Show compose panel
+         */
+        function showCompose() {
+            if (!currentAccount) {
+                showStatus('Please select an account first', 'error');
+                return;
+            }
+            document.getElementById('composePanel').style.display = 'block';
+            document.getElementById('composeTo').focus();
+        }
+
+        /**
+         * Hide compose panel
+         */
+        function hideCompose() {
+            document.getElementById('composePanel').style.display = 'none';
+            document.getElementById('composeTo').value = '';
+            document.getElementById('composeCc').value = '';
+            document.getElementById('composeBcc').value = '';
+            document.getElementById('composeSubject').value = '';
+            document.getElementById('composeBody').value = '';
+            document.getElementById('htmlModeToggle').checked = false;
+            document.getElementById('htmlPreviewContainer').style.display = 'none';
+            clearValidationMessages();
+            updateComposeMode();
+        }
+
+        /**
+         * Validate email format
+         */
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email.trim());
+        }
+
+        /**
+         * Parse and validate comma-separated email addresses
+         */
+        function parseEmails(emailString) {
+            if (!emailString || !emailString.trim()) {
+                return { valid: [], invalid: [] };
+            }
+
+            const emails = emailString.split(',').map(e => e.trim()).filter(e => e);
+            const valid = emails.filter(isValidEmail);
+            const invalid = emails.filter(e => !isValidEmail(e));
+
+            return { valid, invalid };
+        }
+
+        /**
+         * Validate recipient fields and show feedback
+         */
+        function validateRecipients() {
+            const toInput = document.getElementById('composeTo').value;
+            const ccInput = document.getElementById('composeCc').value;
+            const bccInput = document.getElementById('composeBcc').value;
+
+            const toResult = parseEmails(toInput);
+            const ccResult = parseEmails(ccInput);
+            const bccResult = parseEmails(bccInput);
+
+            // Show validation messages
+            showValidationMsg('toValidationMsg', toResult);
+            showValidationMsg('ccValidationMsg', ccResult);
+            showValidationMsg('bccValidationMsg', bccResult);
+
+            return {
+                toValid: toResult.valid.length > 0,
+                ccValid: ccResult.invalid.length === 0,
+                bccValid: bccResult.invalid.length === 0,
+                to: toResult.valid,
+                cc: ccResult.valid,
+                bcc: bccResult.valid
+            };
+        }
+
+        /**
+         * Display validation feedback for email fields
+         */
+        function showValidationMsg(elementId, result) {
+            const msgEl = document.getElementById(elementId);
+            if (!msgEl) return;
+
+            if (result.invalid.length > 0) {
+                msgEl.textContent = `Invalid email(s): ${result.invalid.join(', ')}`;
+                msgEl.className = 'mailpro-validation-msg mailpro-validation-error';
+                msgEl.style.display = 'block';
+            } else if (result.valid.length > 0) {
+                msgEl.textContent = `${result.valid.length} recipient(s)`;
+                msgEl.className = 'mailpro-validation-msg mailpro-validation-success';
+                msgEl.style.display = 'block';
+            } else {
+                msgEl.style.display = 'none';
+            }
+        }
+
+        /**
+         * Update HTML preview in real-time
+         */
+        let previewUpdateTimeout;
+        function updateHtmlPreview() {
+            if (!document.getElementById('htmlModeToggle').checked) return;
+
+            clearTimeout(previewUpdateTimeout);
+            previewUpdateTimeout = setTimeout(() => {
+                const htmlContent = document.getElementById('composeBody').value;
+                const previewFrame = document.getElementById('htmlPreviewFrame');
+
+                if (previewFrame && htmlContent.trim()) {
+                    const wrappedHtml = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <style>
+                                body {
+                                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+                                    margin: 20px;
+                                    color: #333;
+                                    line-height: 1.5;
+                                }
+                                img { max-width: 100%; height: auto; }
+                                a { color: #0066cc; text-decoration: none; }
+                                a:hover { text-decoration: underline; }
+                                table { border-collapse: collapse; width: 100%; }
+                                td, th { border: 1px solid #ddd; padding: 8px; }
+                            </style>
+                        </head>
+                        <body>${sanitizeHtmlContent(htmlContent)}</body>
+                        </html>
+                    `;
+                    previewFrame.srcdoc = wrappedHtml;
+                }
+            }, 300); // Debounce preview updates
+        }
+
+        /**
+         * Basic HTML sanitization for preview (client-side)
+         */
+        function sanitizeHtmlContent(html) {
+            const temp = document.createElement('div');
+            temp.textContent = html;
+            const sanitized = temp.innerHTML;
+
+            // Allow basic safe tags
+            return sanitized
+                .replace(/&lt;b&gt;/g, '<b>')
+                .replace(/&lt;\/b&gt;/g, '</b>')
+                .replace(/&lt;i&gt;/g, '<i>')
+                .replace(/&lt;\/i&gt;/g, '</i>')
+                .replace(/&lt;u&gt;/g, '<u>')
+                .replace(/&lt;\/u&gt;/g, '</u>')
+                .replace(/&lt;p&gt;/g, '<p>')
+                .replace(/&lt;\/p&gt;/g, '</p>')
+                .replace(/&lt;br&gt;/g, '<br>')
+                .replace(/&lt;hr&gt;/g, '<hr>')
+                .replace(/&lt;h[1-6]&gt;/g, (m) => m.replace(/&lt;/g, '<').replace(/&gt;/g, '>'))
+                .replace(/&lt;\/h[1-6]&gt;/g, (m) => m.replace(/&lt;/g, '<').replace(/&gt;/g, '>'))
+                .replace(/&lt;ul&gt;/g, '<ul>')
+                .replace(/&lt;\/ul&gt;/g, '</ul>')
+                .replace(/&lt;ol&gt;/g, '<ol>')
+                .replace(/&lt;\/ol&gt;/g, '</ol>')
+                .replace(/&lt;li&gt;/g, '<li>')
+                .replace(/&lt;\/li&gt;/g, '</li>')
+                .replace(/&lt;img\s+src="([^"]+)"\s*\/?&gt;/g, '<img src="$1" alt="image" style="max-width: 100%;">')
+                .replace(/&lt;a\s+href="([^"]+)"&gt;/g, '<a href="$1">')
+                .replace(/&lt;\/a&gt;/g, '</a>')
+                .replace(/&lt;table&gt;/g, '<table>')
+                .replace(/&lt;\/table&gt;/g, '</table>')
+                .replace(/&lt;tr&gt;/g, '<tr>')
+                .replace(/&lt;\/tr&gt;/g, '</tr>')
+                .replace(/&lt;td&gt;/g, '<td>')
+                .replace(/&lt;\/td&gt;/g, '</td>')
+                .replace(/&lt;th&gt;/g, '<th>')
+                .replace(/&lt;\/th&gt;/g, '</th>');
+        }
+
+        /**
+         * Send email with support for multiple recipients and HTML content
+         */
+        async function sendEmail() {
+            const subject = document.getElementById('composeSubject').value.trim();
+            const body = document.getElementById('composeBody').value.trim();
+            const isHtmlMode = document.getElementById('htmlModeToggle').checked;
+            const sendStatusDiv = document.getElementById('sendStatus');
+
+            // Validate recipients
+            const recipientValidation = validateRecipients();
+
+            // Validation checks
+            if (!subject || !body) {
+                sendStatusDiv.textContent = 'Please fill in all required fields';
+                sendStatusDiv.className = 'mailpro-status-message mailpro-status-error';
+                sendStatusDiv.style.display = 'block';
+                return;
+            }
+
+            if (!recipientValidation.toValid) {
+                sendStatusDiv.textContent = 'Please provide at least one valid To address';
+                sendStatusDiv.className = 'mailpro-status-message mailpro-status-error';
+                sendStatusDiv.style.display = 'block';
+                return;
+            }
+
+            if (!recipientValidation.ccValid || !recipientValidation.bccValid) {
+                sendStatusDiv.textContent = 'Please fix invalid email addresses in Cc or Bcc fields';
+                sendStatusDiv.className = 'mailpro-status-message mailpro-status-error';
+                sendStatusDiv.style.display = 'block';
+                return;
+            }
+
+            // Show loading state
+            const sendBtn = document.getElementById('sendBtn');
+            const originalText = sendBtn.textContent;
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+            sendStatusDiv.textContent = '';
+            sendStatusDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: currentAccount,
+                        to: recipientValidation.to,
+                        cc: recipientValidation.cc.length > 0 ? recipientValidation.cc : undefined,
+                        bcc: recipientValidation.bcc.length > 0 ? recipientValidation.bcc : undefined,
+                        subject: subject,
+                        body: body,
+                        isHtml: isHtmlMode
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    const recipientCount = recipientValidation.to.length + (recipientValidation.cc.length || 0);
+                    sendStatusDiv.textContent = `Email sent successfully to ${recipientCount} recipient(s)!`;
+                    sendStatusDiv.className = 'mailpro-status-message mailpro-status-success';
+                    sendStatusDiv.style.display = 'block';
+
+                    // Clear form
+                    hideCompose();
+                    showStatus(`Email sent: "${result.subject}"`, 'success');
+
+                    // Refresh inbox to show activity
+                    setTimeout(() => loadEmails(), 1000);
+                } else {
+                    sendStatusDiv.textContent = result.error || 'Failed to send email';
+                    sendStatusDiv.className = 'mailpro-status-message mailpro-status-error';
+                    sendStatusDiv.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Error sending email:', error);
+                sendStatusDiv.textContent = 'Network error: ' + error.message;
+                sendStatusDiv.className = 'mailpro-status-message mailpro-status-error';
+                sendStatusDiv.style.display = 'block';
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = originalText;
+            }
+        }
+
+        /**
+         * Show status message
+         */
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.className = `mailpro-status-message mailpro-status-${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        /**
+         * Format date for display
+         */
+        function formatDate(dateString) {
+            if (!dateString) return 'Unknown date';
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        /**
+         * Escape HTML to prevent XSS
+         */
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /**
+         * Start auto-refresh
+         */
+        function startAutoRefresh() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(() => {
+                if (currentAccount) {
+                    loadEmails();
+                }
+            }, 30000); // 30 seconds
+        }
+
+        /**
+         * Stop auto-refresh
+         */
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+
+        // Event listeners
+        document.getElementById('accountSelect').addEventListener('change', function() {
+            currentAccount = this.value;
+            if (currentAccount) {
+                loadEmails();
+                startAutoRefresh();
+                document.getElementById('composeBtn').style.display = 'inline-block';
+            } else {
+                stopAutoRefresh();
+                document.getElementById('emailList').innerHTML = '<div class="mailpro-loading">Select a mail nafij account to view emails</div>';
+                document.getElementById('composeBtn').style.display = 'none';
+            }
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', function() {
+            if (currentAccount) {
+                loadEmails();
+            } else {
+                loadAccounts();
+            }
+        });
+
+        document.getElementById('composeBtn').addEventListener('click', showCompose);
+        document.getElementById('closeComposeBtn').addEventListener('click', hideCompose);
+        document.getElementById('cancelBtn').addEventListener('click', hideCompose);
+        document.getElementById('sendBtn').addEventListener('click', sendEmail);
+        document.getElementById('backBtn').addEventListener('click', goBack);
+
+        // HTML Mode Toggle Handler
+        document.getElementById('htmlModeToggle').addEventListener('change', updateComposeMode);
+
+        /**
+         * Update compose UI based on HTML mode
+         */
+        function updateComposeMode() {
+            const isHtmlMode = document.getElementById('htmlModeToggle').checked;
+            const previewBtn = document.getElementById('togglePreviewBtn');
+            const bodyTextarea = document.getElementById('composeBody');
+
+            if (isHtmlMode) {
+                previewBtn.style.display = 'inline-block';
+                bodyTextarea.placeholder = 'Write HTML content here... (e.g., <p>Hello</p>)';
+                bodyTextarea.classList.add('mailpro-compose-html-mode');
+            } else {
+                previewBtn.style.display = 'none';
+                document.getElementById('htmlPreviewContainer').style.display = 'none';
+                bodyTextarea.placeholder = 'Write your message here...';
+                bodyTextarea.classList.remove('mailpro-compose-html-mode');
+            }
+        }
+
+        // Preview Toggle Handler
+        document.getElementById('togglePreviewBtn').addEventListener('click', function() {
+            const previewContainer = document.getElementById('htmlPreviewContainer');
+            if (previewContainer.style.display === 'none') {
+                previewContainer.style.display = 'block';
+                updateHtmlPreview();
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        });
+
+        // Close Preview Handler
+        document.getElementById('closePreviewBtn').addEventListener('click', function() {
+            document.getElementById('htmlPreviewContainer').style.display = 'none';
+        });
+
+        // Real-time preview update
+        document.getElementById('composeBody').addEventListener('input', updateHtmlPreview);
+
+        // Real-time recipient validation
+        document.getElementById('composeTo').addEventListener('input', () => {
+            const result = parseEmails(document.getElementById('composeTo').value);
+            showValidationMsg('toValidationMsg', result);
+        });
+
+        document.getElementById('composeCc').addEventListener('input', () => {
+            const result = parseEmails(document.getElementById('composeCc').value);
+            showValidationMsg('ccValidationMsg', result);
+        });
+
+        document.getElementById('composeBcc').addEventListener('input', () => {
+            const result = parseEmails(document.getElementById('composeBcc').value);
+            showValidationMsg('bccValidationMsg', result);
+        });
+
+        /**
+         * Clear all validation messages
+         */
+        function clearValidationMessages() {
+            ['toValidationMsg', 'ccValidationMsg', 'bccValidationMsg'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAccounts();
+            updateComposeMode();
+
+            // Allow sending with Ctrl+Enter in compose textarea
+            document.getElementById('composeBody').addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    sendEmail();
+                }
+            });
+
+            // Check if email parameter is provided in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const emailParam = urlParams.get('email');
+            if (emailParam) {
+                currentAccount = emailParam;
+                setTimeout(() => {
+                    document.getElementById('accountSelect').value = emailParam;
+                    loadEmails();
+                    startAutoRefresh();
+                }, 1000);
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', stopAutoRefresh);
+    </script>
+
+    <footer class="mailpro-footer" id="mailpro-inbox-footer" role="contentinfo">
+        <div class="mailpro-footer-content">
+            <div class="mailpro-footer-section">
+                <h4 class="mailpro-footer-title">Quick Links</h4>
+                <nav class="mailpro-footer-nav" aria-label="Quick navigation links">
+                    <a href="/" class="mailpro-footer-link" title="Home - MailPro Nafij">Home</a>
+                    <a href="/inbox.html" class="mailpro-footer-link" title="Inbox">Inbox</a>
+                    <a href="/admin" class="mailpro-footer-link" title="Admin Panel">Admin</a>
+                    <a href="/author" class="mailpro-footer-link" title="About the Author">Author</a>
+                </nav>
+            </div>
+            <div class="mailpro-footer-section">
+                <h4 class="mailpro-footer-title">Resources</h4>
+                <nav class="mailpro-footer-nav" aria-label="Resources links">
+                    <a href="/about.html" class="mailpro-footer-link" title="About MailPro Nafij">About</a>
+                    <a href="/credits.html" class="mailpro-footer-link" title="Credits and Contributors">Credits</a>
+                    <a href="/privacy" class="mailpro-footer-link" title="Privacy Policy">Privacy Policy</a>
+                    <a href="/terms" class="mailpro-footer-link" title="Terms of Service">Terms of Service</a>
+                </nav>
+            </div>
+            <div class="mailpro-footer-section">
+                <h4 class="mailpro-footer-title">External</h4>
+                <nav class="mailpro-footer-nav" aria-label="External links">
+                    <a href="https://github.com/Emvologiaop/mailpro-nafij" class="mailpro-footer-link" title="MailPro Nafij on GitHub" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+                    <a href="https://nafijrahaman.me" class="mailpro-footer-link" title="Nafij Rahaman - Creator" target="_blank" rel="noopener noreferrer">Creator Website</a>
+                </nav>
+            </div>
+        </div>
+        <div class="mailpro-footer-bottom">
+            <p class="mailpro-copyright">MailPro Nafij - Secure Gmail management by Nafij Rahaman</p>
+            <p class="mailpro-footer-meta">
+                <span class="mailpro-footer-year" id="mailpro-year"></span>
+                <span class="mailpro-footer-divider">|</span>
+                <span>All rights reserved</span>
+            </p>
+        </div>
+    </footer>
+    <script src="global.js" defer></script>
+</body>
+</html>

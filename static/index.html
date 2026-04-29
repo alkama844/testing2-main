@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MailPro Nafij - Secure Gmail Account Access & Management</title>
+    <meta name="description" content="MailPro Nafij: Temporary secure access to Gmail accounts. Multi-account Gmail viewer with OAuth2 authentication, admin controls, and premium account management.">
+    <meta name="keywords" content="mail nafij, mailpro nafij, mail nafijpro, nafijrahaman, gmail access, email viewer, oauth2, secure email">
+    <meta name="canonical" content="https://mailpro.nafij.me/">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mailpro.nafij.me/">
+    <meta property="og:title" content="MailPro Nafij - Secure Gmail Account Access & Management">
+    <meta property="og:description" content="Temporary secure access to Gmail accounts with multi-account support, OAuth2 authentication, and admin controls.">
+    <meta property="og:image" content="https://mailpro.nafij.me/mailpro-nafij.svg">
+    <meta property="og:image:alt" content="Mailpro Nafij Logo - Secure Gmail Account Access">
+    <meta property="og:site_name" content="MailPro Nafij">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://mailpro.nafij.me/">
+    <meta name="twitter:title" content="MailPro Nafij - Secure Gmail Account Access & Management">
+    <meta name="twitter:description" content="Temporary secure access to Gmail accounts with multi-account support, OAuth2 authentication, and admin controls.">
+    <meta name="twitter:image" content="https://mailpro.nafij.me/mailpro-nafij.svg">
+    <meta name="author" content="Nafij Rahaman">
+    <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "MailPro Nafij",
+      "url": "https://mailpro.nafij.me",
+      "description": "Secure temporary access to Gmail accounts with OAuth2 authentication and admin controls",
+      "applicationCategory": "EmailApplication",
+      "image": "https://mailpro.nafij.me/mailpro-nafij.svg",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Person",
+        "name": "Nafij Rahaman",
+        "url": "https://nafijrahaman.me"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="mailpro-navbar" role="banner">
+        <a href="/" class="mailpro-logo-link" title="MailPro Nafij - Home">
+            <img src="/mailpro-nafij.svg" alt="Mailpro Nafij Logo" class="mailpro-logo-img" width="56" height="56">
+            <span class="mailpro-logo-text">MailPro Nafij</span>
+        </a>
+        <nav class="mailpro-nav" aria-label="Main navigation">
+            <a href="/" class="mailpro-nav-link" title="Home - MailPro Nafij">Home</a>
+            <a href="/inbox.html" class="mailpro-nav-link" title="Inbox - View emails">Inbox</a>
+            <a href="/admin" class="mailpro-nav-link" title="Admin Panel">Admin</a>
+            <a href="/author" class="mailpro-nav-link" title="About the Author">Author</a>
+            <a href="/about.html" class="mailpro-nav-link" title="About MailPro Nafij">About</a>
+            <a href="/credits.html" class="mailpro-nav-link" title="Credits and Contributors">Credits</a>
+        </nav>
+        <div class="mailpro-header-right">
+            <button id="themeToggle" class="mailpro-btn-theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme">🌙</button>
+        </div>
+    </header>
+    <div class="container">
+        <div class="mailpro-header">
+            <img src="/mailpro-nafij.svg" alt="MailPro Nafij - Secure Gmail Account Access Platform" class="mailpro-hero-image" width="100%" height="auto">
+            <h1 id="mailpro-title">MailPro Nafij</h1>
+            <p class="mailpro-tagline">Secure temporary access to Gmail accounts</p>
+        </div>
+
+        <div class="mailpro-card mailpro-cta-card mailpro-hero-section" id="mailpro-cta-section">
+            <h2 class="mailpro-section-title">Welcome to MailPro Nafij</h2>
+            <p class="mailpro-description">Secure, temporary access to Gmail accounts with OAuth2 authentication, multi-account support, and powerful admin controls.</p>
+
+            <div class="mailpro-button-group mailpro-button-group-large">
+                <a href="/auth/google" class="mailpro-btn mailpro-btn-primary mailpro-btn-lg" aria-label="Connect your Gmail account to MailPro Nafij">
+                    Connect Gmail Account
+                </a>
+                <a href="/inbox.html" class="mailpro-btn mailpro-btn-secondary mailpro-btn-lg" aria-label="View available public Gmail accounts in MailPro Nafij">
+                    View Available Accounts
+                </a>
+                <a href="/admin" class="mailpro-btn mailpro-btn-secondary mailpro-btn-lg" aria-label="Access the Admin Panel">
+                    Go to Admin Panel
+                </a>
+                <a href="#mailpro-features-section" class="mailpro-btn mailpro-btn-outline mailpro-btn-lg" aria-label="Learn more about MailPro Nafij features">
+                    Learn More
+                </a>
+            </div>
+        </div>
+
+        <section class="mailpro-features" id="mailpro-features-section" aria-label="MailPro Nafij key features">
+            <h2 class="mailpro-section-title mailpro-features-heading">Key Features</h2>
+            <div class="mailpro-feature-card" id="mailpro-feature-security">
+                <h3 class="mailpro-feature-title">🔐 Secure OAuth2 Authentication</h3>
+                <p class="mailpro-feature-description">Connect safely using Google's official OAuth2 authentication. Your Gmail password is never stored or exposed.</p>
+            </div>
+            <div class="mailpro-feature-card" id="mailpro-feature-multiaccounts">
+                <h3 class="mailpro-feature-title">👥 Multi-Account Support</h3>
+                <p class="mailpro-feature-description">Switch between multiple connected accounts easily and manage them all from one unified dashboard.</p>
+            </div>
+            <div class="mailpro-feature-card" id="mailpro-feature-realtime">
+                <h3 class="mailpro-feature-title">⚡ Real-time Auto-Refresh</h3>
+                <p class="mailpro-feature-description">Auto-refresh your inbox every 30 seconds to get the latest emails without manual refreshing.</p>
+            </div>
+            <div class="mailpro-feature-card" id="mailpro-feature-admin">
+                <h3 class="mailpro-feature-title">⚙️ Admin Controls</h3>
+                <p class="mailpro-feature-description">Comprehensive admin panel for managing accounts, monitoring usage, and controlling access permissions.</p>
+            </div>
+            <div class="mailpro-feature-card" id="mailpro-feature-email">
+                <h3 class="mailpro-feature-title">✉️ Email Sending</h3>
+                <p class="mailpro-feature-description">Send emails directly from connected accounts with full composition and formatting support.</p>
+            </div>
+            <div class="mailpro-feature-card" id="mailpro-feature-settings">
+                <h3 class="mailpro-feature-title">⚙️ Advanced Settings</h3>
+                <p class="mailpro-feature-description">Customize your experience with personalized settings, preferences, and notification controls.</p>
+            </div>
+        </section>
+
+        <footer class="mailpro-footer" id="mailpro-footer" role="contentinfo">
+            <div class="mailpro-footer-content">
+                <div class="mailpro-footer-section">
+                    <h4 class="mailpro-footer-title">Quick Links</h4>
+                    <nav class="mailpro-footer-nav" aria-label="Quick navigation links">
+                        <a href="/" class="mailpro-footer-link" title="Home - MailPro Nafij">Home</a>
+                        <a href="/inbox.html" class="mailpro-footer-link" title="Inbox">Inbox</a>
+                        <a href="/admin" class="mailpro-footer-link" title="Admin Panel">Admin</a>
+                        <a href="/author" class="mailpro-footer-link" title="About the Author">Author</a>
+                    </nav>
+                </div>
+                <div class="mailpro-footer-section">
+                    <h4 class="mailpro-footer-title">Resources</h4>
+                    <nav class="mailpro-footer-nav" aria-label="Resources links">
+                        <a href="/about.html" class="mailpro-footer-link" title="About MailPro Nafij">About</a>
+                        <a href="/credits.html" class="mailpro-footer-link" title="Credits and Contributors">Credits</a>
+                        <a href="/privacy" class="mailpro-footer-link" title="Privacy Policy">Privacy Policy</a>
+                        <a href="/terms" class="mailpro-footer-link" title="Terms of Service">Terms of Service</a>
+                    </nav>
+                </div>
+                <div class="mailpro-footer-section">
+                    <h4 class="mailpro-footer-title">External</h4>
+                    <nav class="mailpro-footer-nav" aria-label="External links">
+                        <a href="https://github.com/Emvologiaop/mailpro-nafij" class="mailpro-footer-link" title="MailPro Nafij on GitHub" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+                        <a href="https://nafijrahaman.me" class="mailpro-footer-link" title="Nafij Rahaman - Creator" target="_blank" rel="noopener noreferrer">Creator Website</a>
+                    </nav>
+                </div>
+            </div>
+            <div class="mailpro-footer-bottom">
+                <p class="mailpro-copyright">MailPro Nafij - Secure Gmail management by Nafij Rahaman</p>
+                <p class="mailpro-footer-meta">
+                    <span class="mailpro-footer-year" id="mailpro-year"></span>
+                    <span class="mailpro-footer-divider">|</span>
+                    <span>All rights reserved</span>
+                </p>
+            </div>
+        </footer>
+    </div>
+    <script src="global.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearElement = document.getElementById('mailpro-year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+</body>
+</html>
