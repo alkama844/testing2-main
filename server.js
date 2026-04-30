@@ -77,9 +77,9 @@ if (!process.env.SESSION_KEYS) {
 app.use(cookieSession({
   maxAge: 30 * 60 * 1000, // 30 minutes for admin sessions
   keys: sessionKeys,
-  secure: process.env.NODE_ENV === 'production',
+  // Let express determine secure status (works for local HTTP and prod HTTPS via trust proxy)
   httpOnly: true,
-  sameSite: 'strict'
+  sameSite: 'lax'
 }));
 
 // Serve static files from public directory
