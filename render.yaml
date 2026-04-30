@@ -17,7 +17,7 @@ services:
       - key: MONGODB_URI
         sync: false
       - key: CANONICAL_URL
-        value: https://mailpro.nafij.me
+        value: https://mailpro-nafij.onrender.com
       - key: SUPPORT_EMAIL
         value: support@nafij.me
       - key: HOSTING_CREDIT

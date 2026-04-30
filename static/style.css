@@ -1198,6 +1198,24 @@ textarea {
   box-shadow: var(--shadow-clay-inset-sm);
 }
 
+/* Fix select dropdown text color and option styling */
+select {
+  color: var(--text-primary);
+  background-color: var(--surface-primary);
+  accent-color: var(--accent-primary);
+}
+
+select option {
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font-weight: normal;
+}
+
+select option:checked {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
+  color: var(--surface-bg);
+}
+
 .mailpro-form-control::placeholder,
 input::placeholder,
 select::placeholder,
@@ -2130,15 +2148,38 @@ tr:hover td {
   color: var(--accent-primary);
 }
 
-.mailpro-account-selector {
-  display: flex;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
-  align-items: flex-end;
+/* Email filter selects styling */
+.mailpro-filter-select {
+  background: linear-gradient(135deg, var(--surface-bg) 0%, var(--surface-primary) 100%);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  padding: var(--space-2) var(--space-2_5);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-base);
 }
 
-.mailpro-account-selector select {
-  flex: 1;
+.mailpro-filter-select:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-clay-outset-sm);
+}
+
+.mailpro-filter-select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-clay-inset-sm), 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.mailpro-filter-select option {
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font-weight: normal;
+  padding: var(--space-2);
+}
+
+.mailpro-filter-select option:checked {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
+  color: var(--surface-bg);
 }
 
 /* Email detail */
