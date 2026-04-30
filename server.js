@@ -8,6 +8,10 @@ const crypto = require('crypto');
 require('dotenv').config();
 
 const app = express();
+
+// Trust proxy for secure cookies behind reverse proxy (Render/Heroku)
+app.set('trust proxy', 1);
+
 const PORT = process.env.PORT || 3000;
 const Account = require('./models/Account');
 
