@@ -342,35 +342,8 @@ function getRawEmail(data) {
 function sanitizeHtml(html) {
   if (!html) return '';
 
-  return html
-    // Remove all script tags and content
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    // Remove event handlers: onXXX="..." or onXXX='...'
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
-    // Remove event handlers: onXXX=value (no quotes)
-    .replace(/on\w+\s*=\s*[^\s>]*/gi, '')
-    // Remove javascript: protocol
-    .replace(/javascript:/gi, '')
-    // Remove data: protocol (can execute code)
-    .replace(/data:text\/html/gi, '')
-    // Remove vbscript: protocol
-    .replace(/vbscript:/gi, '')
-    // Remove iframe tags
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-    // Remove embed tags
-    .replace(/<embed\b[^<]*>/gi, '')
-    // Remove object tags
-    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
-    // Remove form tags
-    .replace(/<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi, '')
-    // Remove input/button tags
-    .replace(/<(input|button|textarea|select|option|label)\b[^<]*>/gi, '')
-    // Remove meta/base/link tags
-    .replace(/<(meta|base|link|style)\b[^<]*>/gi, '')
-    // Remove svg tags (can contain scripts)
-    .replace(/<svg\b[^<]*(?:(?!<\/svg>)<[^<]*)*<\/svg>/gi, '')
-    // Remove style attributes with potential code (expression, behavior, etc)
-    .replace(/style\s*=\s*["']([^"']*(?:expression|behavior|binding)[^"']*)["']/gi, '');
+  // As requested, allow all HTML content (no sanitization)
+  return html;
 }
 
 /**
