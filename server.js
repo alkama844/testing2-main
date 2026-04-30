@@ -1172,17 +1172,16 @@ app.post('/send', async (req, res) => {
       `Subject: ${subject}`,
       `MIME-Version: 1.0`,
       `Content-Type: ${isHtml ? 'text/html' : 'text/plain'}; charset="UTF-8"`,
+      `Content-Transfer-Encoding: base64`
     ];
 
-    // If HTML, ensure proper encoding
-    if (isHtml) {
-      headers.push(`Content-Transfer-Encoding: quoted-printable`);
-    }
+    // Encode the body in base64 to completely preserve HTML, CSS, and special characters
+    const bodyEncoded = Buffer.from(finalBody, 'utf-8').toString('base64');
 
     const emailMessage = [
       ...headers,
       '',
-      finalBody
+      bodyEncoded
     ].join('\r\n');
 
     // Add Bcc recipients to headers for Gmail API (not in actual message headers)
