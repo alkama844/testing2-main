@@ -62,8 +62,8 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Session configuration with environment-based secrets
 const sessionKeys = process.env.SESSION_KEYS
@@ -1176,7 +1176,9 @@ app.post('/send', async (req, res) => {
     ];
 
     // Encode the body in base64 to completely preserve HTML, CSS, and special characters
-    const bodyEncoded = Buffer.from(finalBody, 'utf-8').toString('base64');
+    // RFC 2045 requires base64 lines to be no longer than 76 characters
+    const base64String = Buffer.from(finalBody, 'utf-8').toString('base64');
+    const bodyEncoded = base64String.match(/.{1,76}/g)?.join('\r\n') || '';
 
     const emailMessage = [
       ...headers,

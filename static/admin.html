@@ -793,14 +793,13 @@
                 const result = await response.json();
 
                 if (response.ok) {
+                    alert(`Success! Email sent successfully to ${result.recipients} recipient(s).`);
                     showSendFeedback(`Email sent successfully to ${result.recipients} recipient(s)!`, 'success');
                     clearSendForm();
 
                     // Refresh stats after 1 second
                     setTimeout(() => {
-                        if (currentSelectedAccount === email) {
-                            loadSendingStats();
-                        }
+                        selectAccountForDetails(email);
                         loadAccounts();
                     }, 1000);
                 } else {
