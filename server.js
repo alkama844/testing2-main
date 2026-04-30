@@ -1114,8 +1114,8 @@ app.post('/send', async (req, res) => {
       });
     }
 
-    // Access control: user can only send from their own accounts
-    if (userEmail !== email.toLowerCase()) {
+    // Access control: user can only send from their own accounts, unless they are admin
+    if (userEmail !== email.toLowerCase() && !req.session.isAdmin) {
       return res.status(403).json({
         error: 'You can only send emails from your own account'
       });
