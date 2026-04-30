@@ -1160,8 +1160,9 @@ app.post('/send', async (req, res) => {
     // Initialize Gmail API
     const gmail = google.gmail({ version: 'v1', auth: accountOAuth });
 
-    // Sanitize HTML if provided
-    const sanitizedBody = isHtml ? sanitizeHtml(body) : body;
+    // For sending, we allow raw HTML so users can use <style> tags and proper templates.
+    // The recipient's email client will handle its own security filtering.
+    const finalBody = body;
 
     // Construct email message with proper MIME format
     const headers = [
@@ -1181,7 +1182,7 @@ app.post('/send', async (req, res) => {
     const emailMessage = [
       ...headers,
       '',
-      isHtml ? sanitizedBody : sanitizedBody
+      finalBody
     ].join('\r\n');
 
     // Add Bcc recipients to headers for Gmail API (not in actual message headers)
