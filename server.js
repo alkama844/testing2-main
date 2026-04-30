@@ -213,11 +213,24 @@ function checkLoginRateLimit(ipOrEmail) {
  * Middleware: Check if user is admin (password-protected)
  */
 const checkAdmin = (req, res, next) => {
-  if (!req.session.isAdmin) {
+  const isAdmin = req.session?.isAdmin === true;
+  const sessionId = req.sessionID || 'no-session';
+
+  logger.debug('Admin check', {
+    sessionId,
+    isAdmin,
+    sessionData: req.session ? Object.keys(req.session) : 'no-session'
+  });
+
+  if (!isAdmin) {
+    logger.warn('Access denied - not admin', { sessionId });
     return res.status(403).json({
-      error: 'Access denied. Admin privileges required.'
+      error: 'Access denied. Admin privileges required.',
+      debug: process.env.DEBUG ? { isAdmin, sessionId } : undefined
     });
   }
+
+  logger.info('Admin access granted', { sessionId });
   next();
 };
 
