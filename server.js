@@ -137,7 +137,7 @@ process.on('SIGINT', async () => {
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  process.env.OAUTH_CALLBACK_URL || 'https://mail-service-pro.onrender.com/auth/google/callback'
+  process.env.OAUTH_CALLBACK_URL || 'https://mailpro-nafij.onrender.com/auth/google/callback'
 );
 
 // OAuth scopes for Gmail and user profile access
@@ -558,7 +558,7 @@ app.get('/inbox/:email', checkAccess, async (req, res) => {
     const accountOAuth = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      'https://mail-service-pro.onrender.com/auth/google/callback'
+      process.env.OAUTH_CALLBACK_URL || 'https://mailpro-nafij.onrender.com/auth/google/callback'
     );
     
     accountOAuth.setCredentials({
@@ -630,7 +630,7 @@ app.get('/email/:email/:messageId', checkAccess, async (req, res) => {
     const accountOAuth = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      'https://mail-service-pro.onrender.com/auth/google/callback'
+      process.env.OAUTH_CALLBACK_URL || 'https://mailpro-nafij.onrender.com/auth/google/callback'
     );
 
     accountOAuth.setCredentials({
@@ -1133,7 +1133,7 @@ app.post('/send', async (req, res) => {
     const accountOAuth = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      'https://mail-service-pro.onrender.com/auth/google/callback'
+      process.env.OAUTH_CALLBACK_URL || 'https://mailpro-nafij.onrender.com/auth/google/callback'
     );
 
     accountOAuth.setCredentials({
